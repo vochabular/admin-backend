@@ -1,10 +1,19 @@
 language: python
 python:
   - "3.6"
-  - "3.6-dev"
-  - "3.7-dev"
 install:
   - pip install -r requirements.txt
-script:
-  - python vochabular/manage.py migrate
-  - python vochabular/manage.py test
+
+jobs:
+  include:
+    - stage: test
+      script:
+        - python vochabular/manage.py migrate
+        - python vochabular/manage.py test
+    - stage: lint
+      script:
+        - cd vochabular
+        - pylint --load-plugins pylint_django api vochabular --disable=C,W,R
+    - stage: mypy
+      script:
+        - mypy vochabular
