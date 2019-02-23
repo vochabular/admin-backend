@@ -6,4 +6,4 @@ mypy==0.650
 pylint==2.2.2
 django-graphql-jwt==0.2.0
 pylint-django==2.0.5
-
+django-cors-headers==2.4.0
