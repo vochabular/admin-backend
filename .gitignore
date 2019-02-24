@@ -104,3 +104,7 @@ venv.bak/
 .mypy_cache/
 
 .vscode/
+
+# WebStorm
+# User-specific stuff
+**/.idea
