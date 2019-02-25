@@ -9,14 +9,6 @@ class Chapter(models.Model):
         return self.id
 
 
-class WordGroup(models.Model):
-    title = models.CharField(max_length=100)
-    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
-
-    def __int__(self):
-        return self.id
-
-
 class ComponentType(models.Model):
     name = models.CharField(max_length=45)
     schema = models.TextField(max_length=100)
@@ -64,6 +56,68 @@ class Translation(models.Model):
 class Comment(models.Model):
     comment = models.TextField(max_length=500)
     active = models.BooleanField()
+
+    def __int__(self):
+        return self.id
+
+
+class WordGroup(models.Model):
+    title = models.CharField(max_length=100)
+    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+
+    def __int__(self):
+        return self.id
+
+
+class Word(models.Model):
+
+    def __int__(self):
+        return self.id
+
+
+class Member(models.Model):
+    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    word_group = models.ForeignKey(WordGroup, on_delete=models.CASCADE)
+
+    def __int__(self):
+        return self.id
+
+
+class WordCH(models.Model):
+    text = models.CharField(max_length=40)
+    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+
+    def __int__(self):
+        return self.id
+
+
+class WordEN(models.Model):
+    text = models.CharField(max_length=40)
+    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+
+    def __int__(self):
+        return self.id
+
+
+class WordDE(models.Model):
+    text = models.CharField(max_length=40)
+    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+
+    def __int__(self):
+        return self.id
+
+
+class WordFA(models.Model):
+    text = models.CharField(max_length=40)
+    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+
+    def __int__(self):
+        return self.id
+
+
+class WordAR(models.Model):
+    text = models.CharField(max_length=40)
+    word = models.ForeignKey(Word, on_delete=models.CASCADE)
 
     def __int__(self):
         return self.id
