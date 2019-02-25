@@ -7,6 +7,7 @@ from api.models import ComponentType
 from api.models import Component
 from api.models import Text
 from api.models import Translation
+from api.models import Comment
 
 
 class ChapterType(DjangoObjectType):
@@ -39,6 +40,11 @@ class TranslationType(DjangoObjectType):
         model = Translation
 
 
+class CommentType(DjangoObjectType):
+    class Meta:
+        model = Comment
+
+
 class Query(graphene.ObjectType):
     all_chapters = graphene.List(ChapterType)
     all_word_groups = graphene.List(WordGroupType)
@@ -46,6 +52,7 @@ class Query(graphene.ObjectType):
     all_components = graphene.List(Component_Type)
     all_texts = graphene.List(TextType)
     all_translations = graphene.List(TranslationType)
+    all_comments = graphene.List(CommentType)
 
     @login_required
     def resolve_all_chapters(self, info, **kwargs):
@@ -70,6 +77,10 @@ class Query(graphene.ObjectType):
     @login_required
     def resolve_all_translations(self, info, **kwargs):
         return Translation.objects.all()
+
+    @login_required
+    def resolve_all_comments(self, info, **kwargs):
+        return Comment.objects.all()
 
 
 schema = graphene.Schema(query=Query)

@@ -59,3 +59,11 @@ class Translation(models.Model):
 
     def __int__(self):
         return self.id
+
+
+class Comment(models.Model):
+    comment = models.TextField(max_length=500)
+    active = models.BooleanField()
+
+    def __int__(self):
+        return self.id
