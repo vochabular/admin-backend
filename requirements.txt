@@ -3,7 +3,7 @@ Django==2.1.5
 graphene==2.1.3
 graphene-django==2.2.0
 mypy==0.650
-pylint==2.2.2
+pylint==2.3.0
 django-graphql-jwt==0.2.0
 pylint-django==2.0.5
 django-cors-headers==2.4.0
