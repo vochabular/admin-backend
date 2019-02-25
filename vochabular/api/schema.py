@@ -1,20 +1,22 @@
 import graphene
 from graphql_jwt.decorators import login_required
 from graphene_django.types import DjangoObjectType
-from api.models import Chapter
-from api.models import ComponentType
-from api.models import Component
-from api.models import Text
-from api.models import Translation
-from api.models import Comment
-from api.models import WordGroup
-from api.models import Word
-from api.models import Member
-from api.models import WordCH
-from api.models import WordEN
-from api.models import WordDE
-from api.models import WordFA
-from api.models import WordAR
+from api.models import (
+    Chapter,
+    ComponentType,
+    Component,
+    Text,
+    Translation,
+    Comment,
+    WordGroup,
+    Word,
+    Member,
+    WordCH,
+    WordEN,
+    WordDE,
+    WordFA,
+    WordAR
+)
 
 
 class ChapterType(DjangoObjectType):
@@ -158,5 +160,6 @@ class Query(graphene.ObjectType):
     @login_required
     def resolve_all_word_ars(self, info, **kwargs):
         return WordAR.objects.all()
+
 
 schema = graphene.Schema(query=Query)

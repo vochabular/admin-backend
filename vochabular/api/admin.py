@@ -1,18 +1,20 @@
 from django.contrib import admin
-from api.models import Chapter
-from api.models import ComponentType
-from api.models import Component
-from api.models import Text
-from api.models import Translation
-from api.models import Comment
-from api.models import WordGroup
-from api.models import Word
-from api.models import Member
-from api.models import WordCH
-from api.models import WordEN
-from api.models import WordDE
-from api.models import WordFA
-from api.models import WordAR
+from api.models import (
+    Chapter,
+    ComponentType,
+    Component,
+    Text,
+    Translation,
+    Comment,
+    WordGroup,
+    Word,
+    Member,
+    WordCH,
+    WordEN,
+    WordDE,
+    WordFA,
+    WordAR
+)
 
 admin.site.register(Chapter)
 admin.site.register(ComponentType)

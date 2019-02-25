@@ -2,8 +2,7 @@ from django.db import models
 
 
 class Chapter(models.Model):
-    title = models.CharField(max_length=100)
-    belongs_to = models.ForeignKey('self', on_delete=models.CASCADE)
+    belongs_to = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     def __int__(self):
         return self.id
@@ -47,7 +46,7 @@ class Translation(models.Model):
     language = models.CharField(max_length=45)
     text = models.CharField(max_length=45)
     valid = models.BooleanField()
-    text_id = models.ForeignKey(Text, on_delete=models.CASCADE)
+    text_id = models.OneToOneField(Text, on_delete=models.CASCADE)
 
     def __int__(self):
         return self.id
@@ -62,7 +61,6 @@ class Comment(models.Model):
 
 
 class WordGroup(models.Model):
-    title = models.CharField(max_length=100)
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
 
     def __int__(self):
@@ -85,7 +83,7 @@ class Member(models.Model):
 
 class WordCH(models.Model):
     text = models.CharField(max_length=40)
-    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    word = models.OneToOneField(Word, on_delete=models.CASCADE)
 
     def __int__(self):
         return self.id
@@ -93,7 +91,7 @@ class WordCH(models.Model):
 
 class WordEN(models.Model):
     text = models.CharField(max_length=40)
-    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    word = models.OneToOneField(Word, on_delete=models.CASCADE)
 
     def __int__(self):
         return self.id
@@ -101,7 +99,7 @@ class WordEN(models.Model):
 
 class WordDE(models.Model):
     text = models.CharField(max_length=40)
-    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    word = models.OneToOneField(Word, on_delete=models.CASCADE)
 
     def __int__(self):
         return self.id
@@ -109,7 +107,7 @@ class WordDE(models.Model):
 
 class WordFA(models.Model):
     text = models.CharField(max_length=40)
-    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    word = models.OneToOneField(Word, on_delete=models.CASCADE)
 
     def __int__(self):
         return self.id
@@ -117,7 +115,7 @@ class WordFA(models.Model):
 
 class WordAR(models.Model):
     text = models.CharField(max_length=40)
-    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    word = models.OneToOneField(Word, on_delete=models.CASCADE)
 
     def __int__(self):
         return self.id
