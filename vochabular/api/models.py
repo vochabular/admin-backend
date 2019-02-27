@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Chapter(models.Model):
+    title = models.CharField(max_length=100)
     belongs_to = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     def __int__(self):
@@ -18,10 +19,11 @@ class ComponentType(models.Model):
 
 class Component(models.Model):
     STATE_CHOICES = (
-        ('0', 'state 1'),
-        ('1', 'state 2'),
-        ('2', 'state 3'),
-        ('3', 'state 4'),
+        ('C', 'creation'),
+        ('R', 'in review'),
+        ('U', 'to be updated'),
+        ('T', 'to be translated'),
+        ('F', 'final')
     )
 
     data = models.TextField(max_length=500)
@@ -55,6 +57,7 @@ class Translation(models.Model):
 class Comment(models.Model):
     comment = models.TextField(max_length=500)
     active = models.BooleanField()
+    component = models.ForeignKey(Component, on_delete=models.CASCADE)
 
     def __int__(self):
         return self.id
