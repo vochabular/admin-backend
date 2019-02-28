@@ -12,8 +12,7 @@ jobs:
         - python vochabular/manage.py test
     - stage: lint
       script:
-        - cd vochabular
-        - pylint --load-plugins pylint_django api vochabular --disable=C,W,R
-    - stage: mypy
-      script:
-        - mypy vochabular
+        - cd vochabular && pylint --load-plugins pylint_django api vochabular --disable=C,W,R
+    # - stage: mypy
+    #   script:
+    #     - mypy vochabular
