@@ -1,4 +1,3 @@
 #!/bin/sh
 
-echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'backend@vochabular.ch', \"$ADMIN_PW\")" | python vochabular/manage.py shell
 python vochabular/manage.py migrate
