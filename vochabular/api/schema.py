@@ -1,18 +1,14 @@
 import graphene
-from graphql_jwt.decorators import login_required
+from api.graphql.chapter import ChapterMutation, ChapterQuery
 
-from graphene_django.types import DjangoObjectType
-from api.models import Chapter
 
-class ChapterType(DjangoObjectType):
+class Query(graphene.ObjectType, ChapterQuery):
+    node = graphene.relay.Node.Field()
+
+
+class Mutation(graphene.ObjectType, ChapterMutation):
     class Meta:
-        model = Chapter
+        pass
 
-class Query(graphene.ObjectType):
-    all_chapters = graphene.List(ChapterType)
 
-    @login_required
-    def resolve_all_chapters(self, info, **kwargs):
-        return Chapter.objects.all()
-
-schema = graphene.Schema(query=Query)
+schema = graphene.Schema(query=Query, mutation=Mutation)
