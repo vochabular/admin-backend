@@ -7,3 +7,5 @@ pylint==2.3.0
 django-graphql-jwt==0.2.1
 pylint-django==2.0.5
 django-cors-headers==2.4.0
+gunicorn==19.9.0
+django-heroku==0.3.1
