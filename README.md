@@ -11,7 +11,7 @@ This is a python django application providing a GraphQL API to the SPA. It uses 
 - Install python3 and virtualenv
 - Create a virtualenv in the checkout: `virtualenv -p python3 .venv`
 - Activate the virtualenv `source .venv/bin/activate`
-    - Windows: `cd .venv/Scripts` and `activate`, then `cd ../..` 
+    - Windows: `cd .venv/Scripts` and `activate`, then `cd ../..`
 - Install dependencies with pip `pip install -r requirements.txt`
 
 ## Setup application
