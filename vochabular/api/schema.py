@@ -90,75 +90,75 @@ class WordARType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    all_chapters = graphene.List(ChapterType)
-    all_component_types = graphene.List(ComponentTypeType)
-    all_components = graphene.List(Component_Type)
-    all_texts = graphene.List(TextType)
-    all_translations = graphene.List(TranslationType)
-    all_comments = graphene.List(CommentType)
-    all_word_groups = graphene.List(WordGroupType)
-    all_words = graphene.List(WordType)
-    all_members = graphene.List(MemberType)
-    all_word_chs = graphene.List(WordCHType)
-    all_word_ens = graphene.List(WordENType)
-    all_word_des = graphene.List(WordDEType)
-    all_word_fas = graphene.List(WordFAType)
-    all_word_ars = graphene.List(WordARType)
+    chapters = graphene.List(ChapterType)
+    component_types = graphene.List(ComponentTypeType)
+    components = graphene.List(Component_Type)
+    texts = graphene.List(TextType)
+    translations = graphene.List(TranslationType)
+    comments = graphene.List(CommentType)
+    word_groups = graphene.List(WordGroupType)
+    words = graphene.List(WordType)
+    members = graphene.List(MemberType)
+    word_chs = graphene.List(WordCHType)
+    word_ens = graphene.List(WordENType)
+    word_des = graphene.List(WordDEType)
+    word_fas = graphene.List(WordFAType)
+    word_ars = graphene.List(WordARType)
 
     @login_required
-    def resolve_all_chapters(self, info, **kwargs):
+    def resolve_chapters(self, info, **kwargs):
         return Chapter.objects.all()
 
     @login_required
-    def resolve_all_component_types(self, info, **kwargs):
+    def resolve_component_types(self, info, **kwargs):
         return ComponentType.objects.all()
 
     @login_required
-    def resolve_all_components(self, info, **kwargs):
+    def resolve_components(self, info, **kwargs):
         return Component.objects.all()
 
     @login_required
-    def resolve_all_texts(self, info, **kwargs):
+    def resolve_texts(self, info, **kwargs):
         return Text.objects.all()
 
     @login_required
-    def resolve_all_translations(self, info, **kwargs):
+    def resolve_translations(self, info, **kwargs):
         return Translation.objects.all()
 
     @login_required
-    def resolve_all_comments(self, info, **kwargs):
+    def resolve_comments(self, info, **kwargs):
         return Comment.objects.all()
 
     @login_required
-    def resolve_all_word_groups(self, info, **kwargs):
+    def resolve_word_groups(self, info, **kwargs):
         return WordGroup.objects.all()
 
     @login_required
-    def resolve_all_words(self, info, **kwargs):
+    def resolve_words(self, info, **kwargs):
         return Word.objects.all()
 
     @login_required
-    def resolve_all_members(self, info, **kwargs):
+    def resolve_members(self, info, **kwargs):
         return Member.objects.all()
 
     @login_required
-    def resolve_all_word_chs(self, info, **kwargs):
+    def resolve_word_chs(self, info, **kwargs):
         return WordCH.objects.all()
 
     @login_required
-    def resolve_all_word_ens(self, info, **kwargs):
+    def resolve_word_ens(self, info, **kwargs):
         return WordEN.objects.all()
 
     @login_required
-    def resolve_all_word_des(self, info, **kwargs):
+    def resolve_word_des(self, info, **kwargs):
         return WordDE.objects.all()
 
     @login_required
-    def resolve_all_word_fas(self, info, **kwargs):
+    def resolve_word_fas(self, info, **kwargs):
         return WordFA.objects.all()
 
     @login_required
-    def resolve_all_word_ars(self, info, **kwargs):
+    def resolve_word_ars(self, info, **kwargs):
         return WordAR.objects.all()
 
 
