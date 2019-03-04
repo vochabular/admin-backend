@@ -1,8 +1,8 @@
 import graphene
 from graphene_django.types import DjangoObjectType
+from graphql_jwt.decorators import login_required
 
 from api.models import Chapter
-from graphql_jwt.decorators import login_required
 
 
 class ChapterType(DjangoObjectType):
