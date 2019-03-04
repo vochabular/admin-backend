@@ -99,11 +99,11 @@ class Query(graphene.ObjectType):
     word_groups = graphene.List(WordGroupType)
     words = graphene.List(WordType)
     members = graphene.List(MemberType)
-    word_chs = graphene.List(WordCHType)
-    word_ens = graphene.List(WordENType)
-    word_des = graphene.List(WordDEType)
-    word_fas = graphene.List(WordFAType)
-    word_ars = graphene.List(WordARType)
+    words_ch = graphene.List(WordCHType)
+    words_en = graphene.List(WordENType)
+    words_de = graphene.List(WordDEType)
+    words_fa = graphene.List(WordFAType)
+    words_ar = graphene.List(WordARType)
 
     @login_required
     def resolve_chapters(self, info, **kwargs):
@@ -142,23 +142,23 @@ class Query(graphene.ObjectType):
         return Member.objects.all()
 
     @login_required
-    def resolve_word_chs(self, info, **kwargs):
+    def resolve_words_ch(self, info, **kwargs):
         return WordCH.objects.all()
 
     @login_required
-    def resolve_word_ens(self, info, **kwargs):
+    def resolve_words_en(self, info, **kwargs):
         return WordEN.objects.all()
 
     @login_required
-    def resolve_word_des(self, info, **kwargs):
+    def resolve_words_de(self, info, **kwargs):
         return WordDE.objects.all()
 
     @login_required
-    def resolve_word_fas(self, info, **kwargs):
+    def resolve_words_fa(self, info, **kwargs):
         return WordFA.objects.all()
 
     @login_required
-    def resolve_word_ars(self, info, **kwargs):
+    def resolve_words_ar(self, info, **kwargs):
         return WordAR.objects.all()
 
 
