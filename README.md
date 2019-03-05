@@ -24,3 +24,25 @@ This is a python django application providing a GraphQL API to the SPA. It uses 
 
 - Install docker and docker-compose
 - Build or download and run images `docker-compose up -d`
+
+## Sample GraphQL Queries
+
+```
+query {
+  chapters {
+    title,
+    text
+  }
+}
+```
+
+```
+mutation {
+  createChapter(input: {chapterData: {title: "title", text: "asdf"}}) {
+    chapter{
+      title,
+      text
+    }
+  }
+}
+```
