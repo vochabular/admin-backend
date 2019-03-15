@@ -27,6 +27,10 @@ class CommentType(DjangoObjectType):
     class Meta:
         model = Comment
 
+    @classmethod
+    def get_node(cls, info, id):
+        return Comment.objects.get(id)
+
 
 class MemberType(DjangoObjectType):
     class Meta:
@@ -37,6 +41,7 @@ class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
     texts = graphene.List(TextType)
     translations = graphene.List(TranslationType)
     comments = graphene.List(CommentType)
+    comment = graphene.Field(type=CommentType, id=graphene.Int())
     members = graphene.List(MemberType)
 
     @login_required
@@ -50,6 +55,10 @@ class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
     @login_required
     def resolve_comments(self, info, **kwargs):
         return Comment.objects.all()
+
+    @login_required
+    def resolve_comment(self, info, id):
+        return Comment.objects.get(id=id)
 
     @login_required
     def resolve_members(self, info, **kwargs):

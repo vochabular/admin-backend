@@ -14,6 +14,10 @@ class WordType(DjangoObjectType):
     class Meta:
         model = Word
 
+    @classmethod
+    def get_node(cls, info, id):
+        return WordType.objects.get(id)
+
 
 class WordCHType(DjangoObjectType):
     class Meta:
@@ -43,6 +47,7 @@ class WordARType(DjangoObjectType):
 class WordQuery(graphene.AbstractType):
     word_groups = graphene.List(WordGroupType)
     words = graphene.List(WordType)
+    word = graphene.Field(type=WordType, id=graphene.Int())
     words_ch = graphene.List(WordCHType)
     words_en = graphene.List(WordENType)
     words_de = graphene.List(WordDEType)
@@ -56,6 +61,10 @@ class WordQuery(graphene.AbstractType):
     @login_required
     def resolve_words(self, info, **kwargs):
         return Word.objects.all()
+
+    @login_required
+    def resolve_word(self, info, id):
+        return Word.objects.get(id=id)
 
     @login_required
     def resolve_words_ch(self, info, **kwargs):
