@@ -6,6 +6,7 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 """
 
 import os
+from vochabular.auth import user_handler
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -72,8 +73,11 @@ GRAPHENE = {
 
 # JWT_SECRET_KEY needs to be set to the key in Auth0
 GRAPHQL_JWT = {
-    'JWT_SECRET_KEY': 'secret'
+    'JWT_ALGORITHM': 'RSA256',
+    'JWT_VERIFY': False,
+    'JWT_PAYLOAD_GET_USERNAME_HANDLER': user_handler
 }
+
 
 AUTHENTICATION_BACKENDS = [
     'graphql_jwt.backends.JSONWebTokenBackend',
