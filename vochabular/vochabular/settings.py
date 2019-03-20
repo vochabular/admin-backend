@@ -6,7 +6,7 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 """
 
 import os
-from vochabular.auth import user_handler
+from vochabular.auth import get_key, user_handler
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -71,13 +71,14 @@ GRAPHENE = {
     ],
 }
 
-# JWT_SECRET_KEY needs to be set to the key in Auth0
 GRAPHQL_JWT = {
-    'JWT_ALGORITHM': 'RSA256',
-    'JWT_VERIFY': False,
+    'JWT_SECRET_KEY': get_key(b"""-----BEGIN CERTIFICATE-----
+MIIDFTCCAf2gAwIBAgIJPfoA7M4Opdl5MA0GCSqGSIb3DQEBCwUAMCgxJjAkBgNVBAMTHXZvY2hhYnVsYXItYWRtaW4uZXUuYXV0aDAuY29tMB4XDTE5MDExNTIyNTUwNFoXDTMyMDkyMzIyNTUwNFowKDEmMCQGA1UEAxMddm9jaGFidWxhci1hZG1pbi5ldS5hdXRoMC5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfE+zsqqpZcsEOqTPCFnPDsQzJqF04y5dOmxe7Z1pJA14WtcqYe+3dOcFQ2avuB/qROBDZ2LOMRS3W/T9tyCuj0L3b1lCeNm8F7vptPU+pzURmz5Gj6lDK5BXdpBUIoj8D172iM2Xd1QycnIWmVCAyG+Hwx7h8W1cCMNhOBGozRooNilWOXvxIard7Cxib3NDmHn37X9lCNws/nP3Pi9bnOSVJ+htP/J6zlTxZDyZ/zU2ZGMgEUFf6BSXooPJFoIbffusvn17IGVieuJfBSWgsLyw2vZUEDbsQZCtXI1c1lJwdHtZ2VQZEAKSBU5CcAMSg7ynZqp0eTkMIeNGOdFfjAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFEs4OTeXKUQHe4BSEA5NmCLfGxGYMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAKCi2SdX6eYAmrIXtPCYVUzZAzVvSFL4+1ZIRHTCa6Og/2pfYZejyaUUzxgi3Po2PmZtRih42z7vPzYG14g3v3sm9RhguwyYymvpMnKvT5jBq3szMXyRF9gmoElttqEcCHdDOta758JpI2Zkh+kkJwnaLHMk560sYyQc1PHi7+k/7vf+pf7n4jVZHPqRUWggXdZ7fF55Lt/POo9aDCQ3u7hjQaNypdM7hzbrWcxPVFo8f/l136ZsQ8bph1UUK3oF0l1UsJW8bM05Wre1aqjwegQaYRgOHORk+Iwql5T6YpFrZ5gqytqRdEp0IsOkadEvykWjW8PgnatbZVG7p1kwjTg==
+-----END CERTIFICATE-----"""),
+    'JWT_ALGORITHM': 'RS256',
+    'JWT_AUDIENCE': 'uDYqwYL0v0lMobZ24ywbkbWTLxiynUj7', # client ID
     'JWT_PAYLOAD_GET_USERNAME_HANDLER': user_handler
 }
-
 
 AUTHENTICATION_BACKENDS = [
     'graphql_jwt.backends.JSONWebTokenBackend',
