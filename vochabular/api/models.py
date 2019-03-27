@@ -1,9 +1,12 @@
 from django.db import models
+from datetime import datetime
 
 
 class Chapter(models.Model):
-    title = models.CharField(max_length=100)
     fk_belongs_to = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    title = models.CharField(max_length=45)
+    description = models.CharField(max_length=500)
+    number = models.FloatField()
 
     def __str__(self):
         return self.title
@@ -30,6 +33,7 @@ class Component(models.Model):
     fk_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
     fk_componentType = models.ForeignKey(ComponentType, on_delete=models.CASCADE)
     state = models.CharField(max_length=1, choices=STATE_CHOICES, default='0')
+    fk_component = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return 'Component:' + str(self.id)
@@ -45,6 +49,15 @@ class Translation(models.Model):
         return self.text_field
 
 
+class Media(models.Model):
+    type = models.CharField(max_length=45)
+    url = models.CharField(max_length=255)
+    fk_component = models.ForeignKey(Component, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return 'Media:' + str(self.id)
+
+
 class Text(models.Model):
     translatable = models.BooleanField()
     fk_component = models.ForeignKey(Component, on_delete=models.CASCADE)
@@ -55,9 +68,18 @@ class Text(models.Model):
 
 
 class Comment(models.Model):
-    comment = models.TextField(max_length=500)
+    comment = models.CharField(max_length=500)
     active = models.BooleanField()
-    fk_component = models.ForeignKey(Component, on_delete=models.CASCADE)
+    author_name = models.CharField(max_length=45)
+    written = models.DateTimeField(default=datetime.now, null=True, blank=True)
+
+    def __str__(self):
+        return 'Comment:' + str(self.id)
+
+
+class TextHasComment(models.Model):
+    fk_comment = models.ForeignKey('Comment', on_delete=models.CASCADE)
+    fk_text = models.ForeignKey('Text', on_delete=models.CASCADE)
 
     def __str__(self):
         return 'Comment:' + str(self.id)
@@ -87,6 +109,8 @@ class Member(models.Model):
 class WordCH(models.Model):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
+    audio = models.CharField(max_length=255)
+    example_sentence = models.CharField(max_length=500)
 
     def __str__(self):
         return 'CH:' + self.text
@@ -95,6 +119,8 @@ class WordCH(models.Model):
 class WordEN(models.Model):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
+    audio = models.CharField(max_length=255)
+    example_sentence = models.CharField(max_length=500)
 
     def __str__(self):
         return 'EN:' + self.text
@@ -103,6 +129,8 @@ class WordEN(models.Model):
 class WordDE(models.Model):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
+    audio = models.CharField(max_length=255)
+    example_sentence = models.CharField(max_length=500)
 
     def __str__(self):
         return 'DE:' + self.text
@@ -111,6 +139,8 @@ class WordDE(models.Model):
 class WordFA(models.Model):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
+    audio = models.CharField(max_length=255)
+    example_sentence = models.CharField(max_length=500)
 
     def __str__(self):
         return 'FA:' + self.text
@@ -119,6 +149,8 @@ class WordFA(models.Model):
 class WordAR(models.Model):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
+    audio = models.CharField(max_length=255)
+    example_sentence = models.CharField(max_length=500)
 
     def __str__(self):
         return 'AR:' + self.text

@@ -6,6 +6,8 @@ from api.models import (
     Text,
     Translation,
     Comment,
+    TextHasComment,
+    Media,
     WordGroup,
     Word,
     Member,
@@ -22,6 +24,8 @@ admin.site.register(Component)
 admin.site.register(Text)
 admin.site.register(Translation)
 admin.site.register(Comment)
+admin.site.register(TextHasComment)
+admin.site.register(Media)
 admin.site.register(WordGroup)
 admin.site.register(Word)
 admin.site.register(Member)
