@@ -7,6 +7,8 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 
 import os
 from vochabular.auth import get_key, user_handler
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -64,6 +66,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'vochabular.wsgi.application'
+
+sentry_sdk.init(
+    dsn="https://b819fde7370044a2914e9b2d36a53273@sentry.io/1427424",
+    integrations=[DjangoIntegration()]
+)
 
 GRAPHENE = {
     'MIDDLEWARE': [
