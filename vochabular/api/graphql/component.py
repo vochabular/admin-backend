@@ -55,15 +55,15 @@ class IntroduceComponentType(graphene.relay.ClientIDMutation):
     class Input:
         componentType_data = graphene.InputField(ComponentTypeInput)
 
-    component = graphene.Field(ComponentTypeType)
+    componentType = graphene.Field(ComponentTypeType)
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, componentType_data):
         componentType = ComponentType(**componentType_data)
-        ComponentType.save()
+        componentType.save()
 
         return IntroduceComponentType(componentType=componentType)
 
 
 class ComponentTypeMutation(graphene.AbstractType):
-    create_componentType = IntroduceComponentType.Field()
+    create_component_type = IntroduceComponentType.Field()
