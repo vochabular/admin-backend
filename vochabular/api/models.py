@@ -7,7 +7,7 @@ class Chapter(models.Model):
     title = models.CharField(max_length=100)
     fk_belongs_to = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField(max_length=500)
-    number = models.FloatField()
+    number = models.IntegerField()
 
     def __str__(self):
         return self.title
