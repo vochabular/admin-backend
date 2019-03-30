@@ -31,7 +31,7 @@ class ChapterInput(graphene.InputObjectType):
     title = graphene.String(required=True)
     fk_belongs_to_id = graphene.ID(required=True)
     description = graphene.String(required=True)
-    number = graphene.Float(required=True)
+    number = graphene.Int(required=True)
 
 class IntroduceChapter(graphene.relay.ClientIDMutation):
     class Input:
