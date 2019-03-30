@@ -2,7 +2,7 @@ import graphene
 from graphql_jwt.decorators import login_required
 from graphene_django.types import DjangoObjectType
 from api.graphql.chapter import ChapterMutation, ChapterQuery
-from api.graphql.component import ComponentTypeMutation, ComponentQuery
+from api.graphql.component import ComponentTypeMutation, ComponentQuery, ComponentMutation
 from api.graphql.word import WordQuery
 
 from api.models import (
@@ -65,7 +65,7 @@ class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
         return Member.objects.all()
 
 
-class Mutation(graphene.ObjectType, ChapterMutation, ComponentTypeMutation):
+class Mutation(graphene.ObjectType, ChapterMutation, ComponentTypeMutation, ComponentMutation):
     class Meta:
         pass
 
