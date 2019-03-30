@@ -1,10 +1,11 @@
 from django.db import models
 from datetime import datetime
+from django.contrib.auth.models import User
 
 
 class Chapter(models.Model):
+    title = models.CharField(max_length=100)
     fk_belongs_to = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
-    title = models.CharField(max_length=45)
     description = models.CharField(max_length=500)
     number = models.FloatField()
 
@@ -55,7 +56,7 @@ class Media(models.Model):
     fk_component = models.ForeignKey(Component, on_delete=models.CASCADE)
 
     def __str__(self):
-        return 'Media:' + str(self.id)
+        return 'ID :' + str(self.id) + 'Type: ' + self.type
 
 
 class Text(models.Model):
@@ -70,19 +71,12 @@ class Text(models.Model):
 class Comment(models.Model):
     comment = models.CharField(max_length=500)
     active = models.BooleanField()
-    author_name = models.CharField(max_length=45)
+    author_name = models.ForeignKey(User, on_delete=models.CASCADE)
     written = models.DateTimeField(default=datetime.now, null=True, blank=True)
+    fk_text = models.ForeignKey(Text, on_delete=models.CASCADE)
 
     def __str__(self):
-        return 'Comment:' + str(self.id)
-
-
-class TextHasComment(models.Model):
-    fk_comment = models.ForeignKey('Comment', on_delete=models.CASCADE)
-    fk_text = models.ForeignKey('Text', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return 'Comment:' + str(self.id)
+        return self.comment
 
 
 class WordGroup(models.Model):

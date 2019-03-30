@@ -10,7 +10,6 @@ from api.models import (
     Translation,
     Comment,
     Member,
-    TextHasComment,
     Media
 )
 
@@ -34,11 +33,6 @@ class CommentType(DjangoObjectType):
         return Comment.objects.get(id)
 
 
-class TextHasCommentType(DjangoObjectType):
-    class Meta:
-        model = TextHasComment
-
-
 class MediaType(DjangoObjectType):
     class Meta:
         model = Media
@@ -54,7 +48,6 @@ class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
     translations = graphene.List(TranslationType)
     comments = graphene.List(CommentType)
     comment = graphene.Field(type=CommentType, id=graphene.Int())
-    TextHasComment = graphene.List(TextHasCommentType)
     media = graphene.List(MediaType)
     members = graphene.List(MemberType)
 
@@ -73,10 +66,6 @@ class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
     @login_required
     def resolve_comment(self, info, id):
         return Comment.objects.get(id=id)
-
-    @login_required
-    def resolve_text_has_comments(self, info, **kwargs):
-        return TextHasComment.objects.all()
 
     @login_required
     def resolve_medias(self, info, **kwargs):
