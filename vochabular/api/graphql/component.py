@@ -44,3 +44,26 @@ class ComponentQuery(graphene.AbstractType):
     @login_required
     def resolve_component(self, info, id):
         return Component.objects.get(id=id)
+
+
+class ComponentTypeInput(graphene.InputObjectType):
+    name = graphene.String(required=True)
+    schema = graphene.String(required=True)
+
+
+class IntroduceComponentType(graphene.relay.ClientIDMutation):
+    class Input:
+        componentType_data = graphene.InputField(ComponentTypeInput)
+
+    component = graphene.Field(ComponentTypeType)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, componentType_data):
+        componentType = ComponentType(**componentType_data)
+        ComponentType.save()
+
+        return IntroduceComponentType(componentType=componentType)
+
+
+class ComponentTypeMutation(graphene.AbstractType):
+    create_componentType = IntroduceComponentType.Field()
