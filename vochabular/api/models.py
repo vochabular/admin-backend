@@ -87,7 +87,6 @@ class WordGroup(models.Model):
 
 
 class Word(models.Model):
-
     def __str__(self):
         return 'Word:' + str(self.id)
 
