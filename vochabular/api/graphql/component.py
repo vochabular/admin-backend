@@ -71,6 +71,9 @@ class ComponentTypeMutation(graphene.AbstractType):
 
 class ComponentInput(graphene.InputObjectType):
     data = graphene.String(required=True)
+    state = graphene.String(required=True)
+    fk_chapter_id = graphene.ID(required=True)
+    fk_component_type_id = graphene.ID(required=True)
 
 class IntroduceComponent(graphene.relay.ClientIDMutation):
     class Input:
@@ -87,4 +90,4 @@ class IntroduceComponent(graphene.relay.ClientIDMutation):
 
 
 class ComponentMutation(graphene.AbstractType):
-    create_component = IntroduceComponent.Field()    
+    create_component = IntroduceComponent.Field()
