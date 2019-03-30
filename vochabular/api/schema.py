@@ -76,7 +76,31 @@ class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
         return Member.objects.all()
 
 
-class Mutation(graphene.ObjectType, ChapterMutation, ComponentTypeMutation, ComponentMutation):
+class CommentInput(graphene.InputObjectType):
+    comment = graphene.String(required=True)
+    active =  graphene.Boolean(required=True)
+    fk_text_id = graphene.ID(required=True)
+
+
+class IntroduceComment(graphene.relay.ClientIDMutation):
+    class Input:
+        comment_data = graphene.InputField(CommentInput)
+
+    comment = graphene.Field(CommentType)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, comment_data):
+        comment = Comment(**comment_data)
+        comment.author_name = info.context.user
+        comment.save()
+
+        return IntroduceComment(comment=comment)
+
+
+class CommentMutation(graphene.AbstractType):
+    create_comment = IntroduceComment.Field()
+
+class Mutation(graphene.ObjectType, ChapterMutation, ComponentTypeMutation, ComponentMutation, CommentMutation):
     class Meta:
         pass
 
