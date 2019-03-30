@@ -32,7 +32,7 @@ class Component(models.Model):
 
     data = models.TextField(max_length=500)
     fk_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
-    fk_componentType = models.ForeignKey(ComponentType, on_delete=models.CASCADE)
+    fk_component_type = models.ForeignKey(ComponentType, on_delete=models.CASCADE)
     state = models.CharField(max_length=1, choices=STATE_CHOICES, default='0')
     fk_component = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 

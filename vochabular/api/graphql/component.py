@@ -44,3 +44,50 @@ class ComponentQuery(graphene.AbstractType):
     @login_required
     def resolve_component(self, info, id):
         return Component.objects.get(id=id)
+
+
+class ComponentTypeInput(graphene.InputObjectType):
+    name = graphene.String(required=True)
+    schema = graphene.String(required=True)
+
+
+class IntroduceComponentType(graphene.relay.ClientIDMutation):
+    class Input:
+        componentType_data = graphene.InputField(ComponentTypeInput)
+
+    componentType = graphene.Field(ComponentTypeType)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, componentType_data):
+        componentType = ComponentType(**componentType_data)
+        componentType.save()
+
+        return IntroduceComponentType(componentType=componentType)
+
+
+class ComponentTypeMutation(graphene.AbstractType):
+    create_component_type = IntroduceComponentType.Field()
+
+
+class ComponentInput(graphene.InputObjectType):
+    data = graphene.String(required=True)
+    state = graphene.String(required=True)
+    fk_chapter_id = graphene.ID(required=True)
+    fk_component_type_id = graphene.ID(required=True)
+
+class IntroduceComponent(graphene.relay.ClientIDMutation):
+    class Input:
+        component_data = graphene.InputField(ComponentInput)
+
+    component = graphene.Field(Component_Type)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, component_data):
+        component = Component(**component_data)
+        component.save()
+
+        return IntroduceComponent(component=component)
+
+
+class ComponentMutation(graphene.AbstractType):
+    create_component = IntroduceComponent.Field()
