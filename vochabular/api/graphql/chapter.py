@@ -60,6 +60,7 @@ class UpdateChapter(graphene.relay.ClientIDMutation):
         chapter.fk_belongs_to_id = chapter_data.fk_belongs_to_id
         chapter.description = chapter_data.description
         chapter.number = chapter_data.number
+        chapter.save()
 
         return UpdateChapter(chapter=chapter)
 

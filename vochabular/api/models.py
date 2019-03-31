@@ -81,9 +81,11 @@ class Comment(models.Model):
 
 class WordGroup(models.Model):
     fk_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+    title_ch = models.CharField(max_length=200, blank=True)
+    title_de = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
-        return 'WordGroup:' + str(self.id)
+        return 'WordGroup:' + str(self.title_de)
 
 
 class Word(models.Model):
@@ -102,8 +104,8 @@ class Member(models.Model):
 class WordCH(models.Model):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
-    audio = models.CharField(max_length=255)
-    example_sentence = models.CharField(max_length=500)
+    audio = models.CharField(max_length=255, null=True, blank=True)
+    example_sentence = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         return 'CH:' + self.text
@@ -112,8 +114,8 @@ class WordCH(models.Model):
 class WordEN(models.Model):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
-    audio = models.CharField(max_length=255)
-    example_sentence = models.CharField(max_length=500)
+    audio = models.CharField(max_length=255, null=True, blank=True)
+    example_sentence = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         return 'EN:' + self.text
@@ -122,8 +124,8 @@ class WordEN(models.Model):
 class WordDE(models.Model):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
-    audio = models.CharField(max_length=255)
-    example_sentence = models.CharField(max_length=500)
+    audio = models.CharField(max_length=255, null=True, blank=True)
+    example_sentence = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         return 'DE:' + self.text
@@ -132,8 +134,8 @@ class WordDE(models.Model):
 class WordFA(models.Model):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
-    audio = models.CharField(max_length=255)
-    example_sentence = models.CharField(max_length=500)
+    audio = models.CharField(max_length=255, null=True, blank=True)
+    example_sentence = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         return 'FA:' + self.text
@@ -142,8 +144,8 @@ class WordFA(models.Model):
 class WordAR(models.Model):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
-    audio = models.CharField(max_length=255)
-    example_sentence = models.CharField(max_length=500)
+    audio = models.CharField(max_length=255, null=True, blank=True)
+    example_sentence = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         return 'AR:' + self.text
