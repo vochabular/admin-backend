@@ -29,7 +29,7 @@ class ChapterQuery(graphene.AbstractType):
 
 class ChapterInput(graphene.InputObjectType):
     title = graphene.String(required=True)
-    fk_belongs_to_id = graphene.ID(required=True)
+    fk_belongs_to_id = graphene.ID()
     description = graphene.String(required=True)
     number = graphene.Int(required=True)
 
