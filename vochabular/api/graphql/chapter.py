@@ -46,6 +46,24 @@ class IntroduceChapter(graphene.relay.ClientIDMutation):
 
         return IntroduceChapter(chapter=chapter)
 
+class UpdateChapter(graphene.relay.ClientIDMutation):
+    class Input:
+        chapter_id = graphene.ID()
+        chapter_data = graphene.InputField(ChapterInput)
+
+    chapter = graphene.Field(ChapterType)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, chapter_data, chapter_id):
+        chapter = Chapter(id=chapter_id)
+        chapter.title = chapter_data.title
+        chapter.fk_belongs_to_id = chapter_data.fk_belongs_to_id
+        chapter.description = chapter_data.description
+        chapter.number = chapter_data.number
+
+        return UpdateChapter(chapter=chapter)
+
 
 class ChapterMutation(graphene.AbstractType):
     create_chapter = IntroduceChapter.Field()
+    update_chapter = UpdateChapter.Field()
