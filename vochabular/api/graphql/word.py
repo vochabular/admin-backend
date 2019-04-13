@@ -85,3 +85,32 @@ class WordQuery(graphene.AbstractType):
     @login_required
     def resolve_words_ar(self, info, **kwargs):
         return WordAR.objects.all()
+
+
+class IntroduceWord(graphene.relay.ClientIDMutation):
+    word = graphene.Field(WordType)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info):
+        word = Word()
+        word.save()
+        cls.create_word_translations(word)
+
+        return IntroduceWord(word=word)
+
+    @classmethod
+    def create_word_translations(cls, word):
+        wordCH = WordCH(word=word)
+        wordCH.save()
+        wordEN = WordEN(word=word)
+        wordEN.save()
+        wordDE = WordDE(word=word)
+        wordDE.save()
+        wordFA = WordFA(word=word)
+        wordFA.save()
+        wordAR = WordAR(word=word)
+        wordAR.save()
+
+
+class WordMutation(graphene.AbstractType):
+    create_word = IntroduceWord.Field()
