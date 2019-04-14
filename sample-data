@@ -1,0 +1,142 @@
+#!/usr/bin/env python
+
+mutations = []
+
+mutations.append("""
+mutation {
+    createChapter(input: {chapterData: {title: "Chapter 1", description: "This is the first chapter", number: 1}}) {
+        chapter {
+            title,
+            description,
+            number
+        }
+    }
+}
+""")
+
+mutations.append("""
+createChapter(input: {chapterData: {title: "Chapter 1.1", description: "This is the first subchapter", number: 1, fkBelongsToId: 1}}) {
+    chapter {
+        title,
+        description,
+        number
+    }
+}
+""")
+
+mutations.append("""
+createChapter(input: {chapterData: {title: "Chapter 1.2", description: "This is the second subchapter", number: 2, fkBelongsToId: 1}}) {
+    chapter {
+        title,
+        description,
+        number
+    }
+}
+""")
+
+mutations.append("""
+mutation {
+    createWordGroup(input: {wordGroupData: {fkChapterId: 1, titleDe: "Familie", titleCh: "Familiä"}}) {
+        wordGroup {
+            id
+        }
+    }
+}
+""")
+
+mutations.append("""
+mutation {
+    createWord(input: {}) {
+        word {
+            id
+        }
+    }
+}
+""")
+
+mutations.append("""
+mutation {
+    createWord(input: {}) {
+        word {
+            id
+        }
+    }
+}
+""")
+
+mutations.append("""
+mutation {
+    createWord(input: {}) {
+        word {
+            id
+        }
+    }
+}
+""")
+
+mutations.append("""
+mutation {
+    updateWordGroup(input: {wordGroupId: 1, wordGroupData: {words: [1,2], fkChapterId: 1, titleDe: "Familie", titleCh: "Familiä"}}) {
+        wordGroup {
+            id
+        }
+    }
+}
+""")
+
+mutations.append("""
+mutation {
+    updateDeWord(input: {wordId: 1, wordData: {text: "Hallo"}}) {
+        word {
+            id
+        }
+    }
+}
+""")
+
+mutations.append("""
+updateEnWord(input: {wordId: 2, wordData: {text: "Garden"}}) {
+    word {
+        id,
+        text
+    }
+}
+""")
+
+mutations.append("""
+mutation {
+  updateChWord(input: {wordId: 3, wordData: {text: "Tschüss"}}) {
+    word {
+      id
+      ,text
+    }
+  },
+  updateDeWord(input: {wordId: 3, wordData: {text: "auf wiedersehen"}}) {
+    word {
+      id
+      ,text
+    }
+  },
+  updateEnWord(input: {wordId: 3, wordData: {text: "bye"}}) {
+    word {
+      id
+      ,text
+    }
+  },
+  updateArWord(input: {wordId:3 wordData: {text: "وداعا"}}) {
+    word {
+      id
+      ,text
+    }
+  },
+  updateFaWord(input: {wordId:3 wordData: {text:"خدا حافظ"}}) {
+    word {
+      id
+      ,text
+    }
+  }
+}
+""")
+
+for mutation in mutations:
+    print(mutation)
