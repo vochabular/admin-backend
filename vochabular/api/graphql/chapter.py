@@ -55,7 +55,7 @@ class UpdateChapter(graphene.relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, chapter_data, chapter_id):
-        chapter = Chapter(id=chapter_id)
+        chapter = Chapter.objects.get(pk=chapter_id)
         chapter.title = chapter_data.title
         chapter.fk_belongs_to_id = chapter_data.fk_belongs_to_id
         chapter.description = chapter_data.description

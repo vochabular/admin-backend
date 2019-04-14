@@ -10,6 +10,10 @@ class WordGroupType(DjangoObjectType):
     class Meta:
         model = WordGroup
 
+    @classmethod
+    def get_node(cls, info, id):
+        return WordGroupType.objects.get(id)
+
 
 class WordType(DjangoObjectType):
     class Meta:
@@ -89,22 +93,44 @@ class WordQuery(graphene.AbstractType):
 
 
 class WordGroupInput(graphene.InputObjectType):
-    fk_chapter_id = graphene.ID()
+    fk_chapter_id = graphene.ID(required=True)
     title_de = graphene.String(required=True)
     title_ch = graphene.String(required=True)
+    words = graphene.List(graphene.ID)
+
 
 class IntroduceWordGroup(graphene.relay.ClientIDMutation):
     class Input:
         word_group_data = graphene.InputField(WordGroupInput)
-    
-    wordGroup = graphene.Field(WordGroupType)
+
+    word_group = graphene.Field(WordGroupType)
 
     @classmethod
-    def mutate_and_get_payload(cls, root, info, word_group_type):
-        wordGroup = WordGroup(**word_group_type)
-        wordGroup.save()
+    def mutate_and_get_payload(cls, root, info, word_group_data):
+        word_group = WordGroup(**word_group_data)
+        word_group.save()
 
-        return IntroduceWordGroup(wordGroup=wordGroup)
+        return IntroduceWordGroup(word_group=word_group)
+
+
+class UpdateWordGroup(graphene.relay.ClientIDMutation):
+    class Input:
+        word_group_id = graphene.ID()
+        word_group_data = graphene.InputField(WordGroupInput)
+
+    word_group = graphene.Field(WordGroupType)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, word_group_data, word_group_id):
+        word_group = WordGroup.objects.get(pk=word_group_id)
+        word_group.fk_chapter_id = word_group_data.fk_chapter_id
+        word_group.title_ch = word_group_data.title_ch
+        word_group.title_de = word_group_data.title_de
+        word_group.words.set(Word.objects.filter(pk__in=word_group_data.words))
+        word_group.save()
+
+        return UpdateWordGroup(word_group=word_group)
+
 
 class IntroduceWord(graphene.relay.ClientIDMutation):
     word = graphene.Field(WordType)
@@ -185,6 +211,8 @@ class UpdateWordAR(UpdateTranslatedWord, graphene.relay.ClientIDMutation):
 
 class WordMutation(graphene.AbstractType):
     create_word = IntroduceWord.Field()
+    create_word_group = IntroduceWordGroup.Field()
+    update_word_group = UpdateWordGroup.Field()
     update_de_word = UpdateWordDE.Field()
     update_ch_word = UpdateWordCH.Field()
     update_en_word = UpdateWordEN.Field()

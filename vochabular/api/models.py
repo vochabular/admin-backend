@@ -83,6 +83,7 @@ class WordGroup(models.Model):
     fk_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
     title_ch = models.CharField(max_length=200, blank=True)
     title_de = models.CharField(max_length=200, blank=True)
+    words = models.ManyToManyField("Word")
 
     def __str__(self):
         return 'WordGroup:' + str(self.title_de)
@@ -91,14 +92,6 @@ class WordGroup(models.Model):
 class Word(models.Model):
     def __str__(self):
         return 'Word:' + str(self.id)
-
-
-class Member(models.Model):
-    fk_word = models.ForeignKey(Word, on_delete=models.CASCADE)
-    fk_word_group = models.ForeignKey(WordGroup, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return 'Member:' + str(self.id)
 
 
 class WordCH(models.Model):
