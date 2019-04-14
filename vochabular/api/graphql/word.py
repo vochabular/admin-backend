@@ -51,6 +51,7 @@ class WordARType(DjangoObjectType):
 
 class WordQuery(graphene.AbstractType):
     word_groups = graphene.List(WordGroupType)
+    word_group = graphene.Field(type=WordGroupType, id=graphene.ID())
     words = graphene.List(WordType)
     word = graphene.Field(type=WordType, id=graphene.Int())
     words_ch = graphene.List(WordCHType)
@@ -62,6 +63,10 @@ class WordQuery(graphene.AbstractType):
     @login_required
     def resolve_word_groups(self, info, **kwargs):
         return WordGroup.objects.all()
+
+    @login_required
+    def resolve_word_group(self, info, id):
+        return WordGroup.objects.get(id=id)
 
     @login_required
     def resolve_words(self, info, **kwargs):
