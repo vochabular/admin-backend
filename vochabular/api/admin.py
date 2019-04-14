@@ -9,7 +9,6 @@ from api.models import (
     Media,
     WordGroup,
     Word,
-    Member,
     WordCH,
     WordEN,
     WordDE,
@@ -26,7 +25,6 @@ admin.site.register(Comment)
 admin.site.register(Media)
 admin.site.register(WordGroup)
 admin.site.register(Word)
-admin.site.register(Member)
 admin.site.register(WordCH)
 admin.site.register(WordEN)
 admin.site.register(WordDE)
