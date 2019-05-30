@@ -1,22 +1,6 @@
 from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User as DjangoUser
-from django.db import models
-
-
-class User(DjangoUser):
-    LANGUAGE_CHOICES = (
-        ('DE', 'Deutsch'),
-        ('EN', 'English')
-    )
-
-    role = models.CharField(max_length=100)
-    language = models.CharField(
-        max_length=2, choices=LANGUAGE_CHOICES, default='DE')
-    translator_languages = models.CharField(max_length=200)
-    event_notifications = models.BooleanField(default=True)
-    setup_completed = models.BooleanField(default=False)
 
 
 def user_handler(payload):

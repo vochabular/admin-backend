@@ -1,5 +1,4 @@
 import graphene, graphql_jwt
-from vochabular.auth import User
 from graphql_jwt.decorators import login_required
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
@@ -12,7 +11,8 @@ from api.models import (
     Text,
     Translation,
     Comment,
-    Media
+    Media,
+    Profile
 )
 
 
@@ -48,14 +48,13 @@ class MediaType(DjangoObjectType):
         filter_fields = ['fk_component_id']
 
 
-class UserType(DjangoObjectType):
+class ProfileType(DjangoObjectType):
     class Meta:
-        model = User
+        model = Profile
 
     @classmethod
     def get_node(cls, info, id):
-        return info.context.user
-        # return User.objects.get(id)
+        return Profile.objects.get(id)
 
 
 class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
@@ -66,7 +65,7 @@ class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
     media = DjangoFilterConnectionField(MediaType)
     # Auth
     verify_token = graphql_jwt.Verify.Field()
-    user = graphene.Field(type=UserType)
+    profile = graphene.Field(type=ProfileType, id=graphene.Int())
 
     @login_required
     def resolve_texts(self, info, **kwargs):
@@ -89,19 +88,25 @@ class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
         return Media.objects.all()
 
 
-class UpdateUser(graphene.Mutation):
+class UpdateProfile(graphene.relay.ClientIDMutation):
     class Arguments:
         firstname = graphene.String()
         lastname = graphene.String()
 
-    user = graphene.Field(UserType)
+    profile = graphene.Field(ProfileType)
 
-    def mutate(self, info, firstname, lastname):
-        user = info.context.user
-        user.first_name = firstname
-        user.last_name = lastname
-        user.save()
-        return UpdateUser(user=user)
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, profile_data, profile_id):
+        profile = Profile.objects.get(pk=profile_id)
+        profile.first_name = profile_data.firstname
+        profile.last_name = profile_data.lastname
+        profile.role = profile_data.role
+        profile.language = profile_data.language
+        profile.translator_languages = profile_data.translator_languages
+        profile.event_notifications = profile_data.event_notifications
+        profile.setup_completed = profile_data.setup_completed
+        profile.save()
+        return UpdateProfile(profile=profile)
 
 
 class CommentInput(graphene.InputObjectType):
@@ -129,7 +134,7 @@ class CommentMutation(graphene.AbstractType):
     create_comment = IntroduceComment.Field()
 
 class Mutation(graphene.ObjectType, ChapterMutation, ComponentTypeMutation, ComponentMutation, CommentMutation, WordMutation):
-    update_user = UpdateUser.Field()
+    update_user = UpdateProfile.Field()
     
     class Meta:
         pass
