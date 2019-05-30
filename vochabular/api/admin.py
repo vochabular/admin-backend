@@ -13,7 +13,8 @@ from api.models import (
     WordEN,
     WordDE,
     WordFA,
-    WordAR
+    WordAR,
+    Profile
 )
 
 admin.site.register(Chapter)
@@ -30,3 +31,4 @@ admin.site.register(WordEN)
 admin.site.register(WordDE)
 admin.site.register(WordFA)
 admin.site.register(WordAR)
+admin.site.register(Profile)

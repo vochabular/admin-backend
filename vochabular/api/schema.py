@@ -1,4 +1,4 @@
-import graphene, graphql_jwt
+import graphene
 from graphql_jwt.decorators import login_required
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
@@ -6,13 +6,13 @@ from graphene_django.types import DjangoObjectType
 from api.graphql.chapter import ChapterMutation, ChapterQuery
 from api.graphql.component import ComponentTypeMutation, ComponentQuery, ComponentMutation
 from api.graphql.word import WordMutation, WordQuery
+from api.graphql.profile import ProfileMutation, ProfileQuery
 
 from api.models import (
     Text,
     Translation,
     Comment,
-    Media,
-    Profile
+    Media
 )
 
 
@@ -48,24 +48,12 @@ class MediaType(DjangoObjectType):
         filter_fields = ['fk_component_id']
 
 
-class ProfileType(DjangoObjectType):
-    class Meta:
-        model = Profile
-
-    @classmethod
-    def get_node(cls, info, id):
-        return Profile.objects.get(id)
-
-
-class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
+class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery, ProfileQuery):
     texts = DjangoFilterConnectionField(TextType)
     translations = DjangoFilterConnectionField(TranslationType)
     comments = DjangoFilterConnectionField(CommentType)
     comment = graphene.Field(type=CommentType, id=graphene.Int())
     media = DjangoFilterConnectionField(MediaType)
-    # Auth
-    verify_token = graphql_jwt.Verify.Field()
-    profile = graphene.Field(type=ProfileType, id=graphene.Int())
 
     @login_required
     def resolve_texts(self, info, **kwargs):
@@ -86,27 +74,6 @@ class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
     @login_required
     def resolve_medias(self, info, **kwargs):
         return Media.objects.all()
-
-
-class UpdateProfile(graphene.relay.ClientIDMutation):
-    class Arguments:
-        firstname = graphene.String()
-        lastname = graphene.String()
-
-    profile = graphene.Field(ProfileType)
-
-    @classmethod
-    def mutate_and_get_payload(cls, root, info, profile_data, profile_id):
-        profile = Profile.objects.get(pk=profile_id)
-        profile.first_name = profile_data.firstname
-        profile.last_name = profile_data.lastname
-        profile.role = profile_data.role
-        profile.language = profile_data.language
-        profile.translator_languages = profile_data.translator_languages
-        profile.event_notifications = profile_data.event_notifications
-        profile.setup_completed = profile_data.setup_completed
-        profile.save()
-        return UpdateProfile(profile=profile)
 
 
 class CommentInput(graphene.InputObjectType):
@@ -133,9 +100,8 @@ class IntroduceComment(graphene.relay.ClientIDMutation):
 class CommentMutation(graphene.AbstractType):
     create_comment = IntroduceComment.Field()
 
-class Mutation(graphene.ObjectType, ChapterMutation, ComponentTypeMutation, ComponentMutation, CommentMutation, WordMutation):
-    update_user = UpdateProfile.Field()
-    
+
+class Mutation(graphene.ObjectType, ChapterMutation, ComponentTypeMutation, ComponentMutation, CommentMutation, WordMutation, ProfileMutation):
     class Meta:
         pass
 

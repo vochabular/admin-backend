@@ -21,6 +21,9 @@ class Profile(models.Model):
     event_notifications = models.BooleanField(default=True)
     setup_completed = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.user.username + ": " + self.firstname + " " + self.lastname
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
