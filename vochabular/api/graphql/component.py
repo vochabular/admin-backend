@@ -83,6 +83,8 @@ class ComponentInput(graphene.InputObjectType):
     state = graphene.String(required=True)
     fk_chapter_id = graphene.ID(required=True)
     fk_component_type_id = graphene.ID(required=True)
+    fk_locked_by_id = graphene.ID()
+    locked_ts = graphene.DateTime()
 
 
 class IntroduceComponent(graphene.relay.ClientIDMutation):
@@ -95,9 +97,30 @@ class IntroduceComponent(graphene.relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, component_data):
         component = Component(**component_data)
         component.save()
-
         return IntroduceComponent(component=component)
+
+
+class UpdateComponent(graphene.relay.ClientIDMutation):
+    class Input:
+        component_id = graphene.ID()
+        component_data = graphene.InputField(ComponentInput)
+
+    component = graphene.Field(Component_Type)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, component_data, component_id):
+        component = Component.objects.get(pk=component_id)
+        component.data = component_data.data
+        component.state = component_data.state
+        component.fk_chapter_id = component_data.fk_chapter_id
+        component.fk_component_type_id = component_data.fk_component_type_id
+        component.fk_locked_by_id = component_data.fk_locked_by_id
+        component.locked_ts = component_data.locked_ts
+        component.save()
+
+        return UpdateComponent(component=component)
 
 
 class ComponentMutation(graphene.AbstractType):
     create_component = IntroduceComponent.Field()
+    update_component = UpdateComponent.Field()
