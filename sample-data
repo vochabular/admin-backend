@@ -4,9 +4,9 @@ mutations = []
 
 mutations.append("""
 mutation {
-    createChapter(input: {chapterData: {title: "Chapter 1", description: "This is the first chapter", number: 1}}) {
+    createChapter(input: {chapterData: {titleCH: "title CH", titleDE: "Chapter 1", description: "This is the first chapter", number: 1}}) {
         chapter {
-            title,
+            titleDE,
             description,
             number
         }
@@ -15,9 +15,9 @@ mutation {
 """)
 
 mutations.append("""
-createChapter(input: {chapterData: {title: "Chapter 1.1", description: "This is the first subchapter", number: 1, fkBelongsToId: 1}}) {
+createChapter(input: {chapterData: {titleCH: "title CH", titleDE: "Chapter 1.1", description: "This is the first subchapter", number: 1, fkBelongsToId: 1}}) {
     chapter {
-        title,
+        titleDE,
         description,
         number
     }
@@ -25,9 +25,9 @@ createChapter(input: {chapterData: {title: "Chapter 1.1", description: "This is 
 """)
 
 mutations.append("""
-createChapter(input: {chapterData: {title: "Chapter 1.2", description: "This is the second subchapter", number: 2, fkBelongsToId: 1}}) {
+createChapter(input: {chapterData: {titleCH: "title CH", titleDE: "Chapter 1.2", description: "This is the second subchapter", number: 2, fkBelongsToId: 1}}) {
     chapter {
-        title,
+        titleDE,
         description,
         number
     }

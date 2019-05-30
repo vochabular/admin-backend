@@ -32,14 +32,18 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 
 class Chapter(models.Model):
-    title = models.CharField(max_length=100)
+    titleCH = models.CharField(max_length=100, unique=True)
+    titleDE = models.CharField(max_length=100, unique=True)
     fk_belongs_to = models.ForeignKey(
         'self', on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField(max_length=500)
     number = models.IntegerField()
 
+    class Meta:
+        unique_together = ('titleDE', 'number',)
+
     def __str__(self):
-        return self.title
+        return self.titleDE
 
 
 class ComponentType(models.Model):
