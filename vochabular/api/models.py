@@ -1,11 +1,40 @@
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
+class Profile(models.Model):
+    LANGUAGE_CHOICES = (
+        ('DE', 'Deutsch'),
+        ('EN', 'English')
+    )
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    firstname = models.CharField(max_length=100)
+    lastname = models.CharField(max_length=100)
+    role = models.CharField(max_length=100)
+    language = models.CharField(
+        max_length=2, choices=LANGUAGE_CHOICES, default='DE')
+    translator_languages = models.CharField(max_length=200)
+    event_notifications = models.BooleanField(default=True)
+    setup_completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user.username + ": " + self.firstname + " " + self.lastname
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
 
 
 class Chapter(models.Model):
     title = models.CharField(max_length=100)
-    fk_belongs_to = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    fk_belongs_to = models.ForeignKey(
+        'self', on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField(max_length=500)
     number = models.IntegerField()
 
@@ -19,7 +48,8 @@ class ComponentType(models.Model):
     base = models.BooleanField(default=False)
     icon = models.CharField(max_length=100)
     label = models.CharField(max_length=45)
-    fk_parent_type = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    fk_parent_type = models.ForeignKey(
+        'self', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -36,9 +66,11 @@ class Component(models.Model):
 
     data = models.TextField(max_length=500)
     fk_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
-    fk_component_type = models.ForeignKey(ComponentType, on_delete=models.CASCADE)
+    fk_component_type = models.ForeignKey(
+        ComponentType, on_delete=models.CASCADE)
     state = models.CharField(max_length=1, choices=STATE_CHOICES, default='0')
-    fk_component = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    fk_component = models.ForeignKey(
+        'self', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return 'Component:' + str(self.id)
@@ -66,7 +98,8 @@ class Media(models.Model):
 class Text(models.Model):
     translatable = models.BooleanField()
     fk_component = models.ForeignKey(Component, on_delete=models.CASCADE)
-    master_translation = models.OneToOneField(Translation, on_delete=models.CASCADE, null=True, blank=True)
+    master_translation = models.OneToOneField(
+        Translation, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return 'Text:' + str(self.id)
