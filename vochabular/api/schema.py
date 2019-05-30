@@ -1,5 +1,5 @@
 import graphene, graphql_jwt
-from django.contrib.auth.models import User
+from vochabular.auth import User
 from graphql_jwt.decorators import login_required
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
@@ -52,6 +52,11 @@ class UserType(DjangoObjectType):
     class Meta:
         model = User
 
+    @classmethod
+    def get_node(cls, info, id):
+        return info.context.user
+        # return User.objects.get(id)
+
 
 class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
     texts = DjangoFilterConnectionField(TextType)
@@ -61,6 +66,7 @@ class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
     media = DjangoFilterConnectionField(MediaType)
     # Auth
     verify_token = graphql_jwt.Verify.Field()
+    user = graphene.Field(type=UserType)
 
     @login_required
     def resolve_texts(self, info, **kwargs):
