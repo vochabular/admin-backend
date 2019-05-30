@@ -52,6 +52,10 @@ class ComponentQuery(graphene.AbstractType):
 class ComponentTypeInput(graphene.InputObjectType):
     name = graphene.String(required=True)
     schema = graphene.String(required=True)
+    base = graphene.Boolean()
+    icon = graphene.String(required=True)
+    label = graphene.String(required=True)
+    fk_parent_type_id = graphene.ID()
 
 
 class IntroduceComponentType(graphene.relay.ClientIDMutation):
