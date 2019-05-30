@@ -75,6 +75,8 @@ class Component(models.Model):
     state = models.CharField(max_length=1, choices=STATE_CHOICES, default='0')
     fk_component = models.ForeignKey(
         'self', on_delete=models.CASCADE, null=True, blank=True)
+    fk_locked_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    locked_ts = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return 'Component:' + str(self.id)
