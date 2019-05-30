@@ -20,18 +20,21 @@ class TextType(DjangoObjectType):
     class Meta:
         model = Text
         interfaces = (graphene.relay.Node, )
+        filter_fields = ['fk_component_id']
 
 
 class TranslationType(DjangoObjectType):
     class Meta:
         model = Translation
         interfaces = (graphene.relay.Node, )
+        filter_fields = ['fk_text_id', 'language']
 
 
 class CommentType(DjangoObjectType):
     class Meta:
         model = Comment
         interfaces = (graphene.relay.Node, )
+        filter_fields = ['fk_text_id']
 
     @classmethod
     def get_node(cls, info, id):
@@ -42,6 +45,7 @@ class MediaType(DjangoObjectType):
     class Meta:
         model = Media
         interfaces = (graphene.relay.Node, )
+        filter_fields = ['fk_component_id']
 
 
 class UserType(DjangoObjectType):

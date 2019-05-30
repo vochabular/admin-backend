@@ -20,6 +20,7 @@ class ComponentTypeType(DjangoObjectType):
 class Component_Type(DjangoObjectType):
     class Meta:
         model = Component
+        filter_fields = ['state']
         interfaces = (graphene.relay.Node, )
 
     @classmethod

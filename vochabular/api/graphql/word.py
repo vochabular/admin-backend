@@ -11,6 +11,7 @@ class WordGroupType(DjangoObjectType):
     class Meta:
         model = WordGroup
         interfaces = (graphene.relay.Node, )
+        filter_fields = ['fk_chapter_id']
 
     @classmethod
     def get_node(cls, info, id):
@@ -20,7 +21,6 @@ class WordGroupType(DjangoObjectType):
 class WordType(DjangoObjectType):
     class Meta:
         model = Word
-        interfaces = (graphene.relay.Node, )
 
     @classmethod
     def get_node(cls, info, id):
@@ -55,7 +55,7 @@ class WordARType(DjangoObjectType):
 class WordQuery(graphene.AbstractType):
     word_groups = DjangoFilterConnectionField(WordGroupType)
     word_group = graphene.Field(type=WordGroupType, id=graphene.ID())
-    words = DjangoFilterConnectionField(WordType)
+    words = graphene.List(WordType)
     word = graphene.Field(type=WordType, id=graphene.Int())
     words_ch = graphene.List(WordCHType)
     words_en = graphene.List(WordENType)
