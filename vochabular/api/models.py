@@ -16,6 +16,7 @@ class Chapter(models.Model):
 class ComponentType(models.Model):
     name = models.CharField(max_length=45)
     schema = models.TextField(max_length=100)
+    base = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

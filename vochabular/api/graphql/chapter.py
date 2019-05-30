@@ -1,4 +1,5 @@
-import graphene
+import django_filters, graphene
+from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 
@@ -8,14 +9,24 @@ from api.models import Chapter
 class ChapterType(DjangoObjectType):
     class Meta:
         model = Chapter
+        interfaces = (graphene.relay.Node, )
 
     @classmethod
     def get_node(cls, info, id):
         return Chapter.objects.get(id)
 
 
+class ChapterFilter(django_filters.FilterSet):
+    class Meta:
+        model = Chapter
+        fields = {
+            'fk_belongs_to': ['isnull'],
+        }
+
+
 class ChapterQuery(graphene.AbstractType):
-    chapters = graphene.List(ChapterType)
+    chapters = DjangoFilterConnectionField(
+        ChapterType, filterset_class=ChapterFilter)
     chapter = graphene.Field(type=ChapterType, id=graphene.Int())
 
     @login_required
@@ -33,6 +44,7 @@ class ChapterInput(graphene.InputObjectType):
     description = graphene.String(required=True)
     number = graphene.Int(required=True)
 
+
 class IntroduceChapter(graphene.relay.ClientIDMutation):
     class Input:
         chapter_data = graphene.InputField(ChapterInput)
@@ -45,6 +57,7 @@ class IntroduceChapter(graphene.relay.ClientIDMutation):
         chapter.save()
 
         return IntroduceChapter(chapter=chapter)
+
 
 class UpdateChapter(graphene.relay.ClientIDMutation):
     class Input:
