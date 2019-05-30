@@ -1,6 +1,8 @@
-import graphene
+import graphene, graphql_jwt
+from django.contrib.auth.models import User
 from graphql_jwt.decorators import login_required
 from graphene_django.types import DjangoObjectType
+
 from api.graphql.chapter import ChapterMutation, ChapterQuery
 from api.graphql.component import ComponentTypeMutation, ComponentQuery, ComponentMutation
 from api.graphql.word import WordMutation, WordQuery
@@ -37,12 +39,19 @@ class MediaType(DjangoObjectType):
         model = Media
 
 
+class UserType(DjangoObjectType):
+    class Meta:
+        model = User
+
+
 class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
     texts = graphene.List(TextType)
     translations = graphene.List(TranslationType)
     comments = graphene.List(CommentType)
     comment = graphene.Field(type=CommentType, id=graphene.Int())
     media = graphene.List(MediaType)
+    # Auth
+    verify_token = graphql_jwt.Verify.Field()
 
     @login_required
     def resolve_texts(self, info, **kwargs):
@@ -63,6 +72,21 @@ class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
     @login_required
     def resolve_medias(self, info, **kwargs):
         return Media.objects.all()
+
+
+class UpdateUser(graphene.Mutation):
+    class Arguments:
+        firstname = graphene.String()
+        lastname = graphene.String()
+
+    user = graphene.Field(UserType)
+
+    def mutate(self, info, firstname, lastname):
+        user = info.context.user
+        user.first_name = firstname
+        user.last_name = lastname
+        user.save()
+        return UpdateUser(user=user)
 
 
 class CommentInput(graphene.InputObjectType):
@@ -90,6 +114,8 @@ class CommentMutation(graphene.AbstractType):
     create_comment = IntroduceComment.Field()
 
 class Mutation(graphene.ObjectType, ChapterMutation, ComponentTypeMutation, ComponentMutation, CommentMutation, WordMutation):
+    update_user = UpdateUser.Field()
+    
     class Meta:
         pass
 
