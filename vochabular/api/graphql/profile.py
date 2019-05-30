@@ -23,7 +23,8 @@ class ProfileQuery(graphene.AbstractType):
 class ProfileInput(graphene.InputObjectType):
     firstname = graphene.String()
     lastname = graphene.String()
-    role = graphene.String()
+    roles = graphene.String()
+    current_role = graphene.String()
     language = graphene.String()
     translator_languages = graphene.String()
     event_notifications = graphene.Boolean()
@@ -42,7 +43,8 @@ class UpdateProfile(graphene.relay.ClientIDMutation):
         profile = Profile.objects.get(user__username=username)
         profile.firstname = profile_data.firstname
         profile.lastname = profile_data.lastname
-        profile.role = profile_data.role
+        profile.roles = profile_data.roles
+        profile.current_role = profile_data.current_role
         profile.language = profile_data.language
         profile.translator_languages = profile_data.translator_languages
         profile.event_notifications = profile_data.event_notifications

@@ -14,7 +14,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
-    role = models.CharField(max_length=100)
+    roles = models.CharField(max_length=120)
+    current_role = models.CharField(max_length=30)
     language = models.CharField(
         max_length=2, choices=LANGUAGE_CHOICES, default='DE')
     translator_languages = models.CharField(max_length=200)
