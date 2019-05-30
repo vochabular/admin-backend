@@ -17,6 +17,9 @@ class ComponentType(models.Model):
     name = models.CharField(max_length=45)
     schema = models.TextField(max_length=100)
     base = models.BooleanField(default=False)
+    icon = models.CharField(max_length=100)
+    label = models.CharField(max_length=45)
+    fk_parent_type = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
