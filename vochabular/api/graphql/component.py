@@ -1,4 +1,5 @@
 import graphene
+from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 
@@ -8,6 +9,8 @@ from api.models import Component, ComponentType
 class ComponentTypeType(DjangoObjectType):
     class Meta:
         model = ComponentType
+        filter_fields = ['base']
+        interfaces = (graphene.relay.Node, )
 
     @classmethod
     def get_node(cls, info, id):
@@ -24,7 +27,7 @@ class Component_Type(DjangoObjectType):
 
 
 class ComponentQuery(graphene.AbstractType):
-    component_types = graphene.List(ComponentTypeType)
+    component_types = DjangoFilterConnectionField(ComponentTypeType)
     component_type = graphene.Field(type=ComponentTypeType, id=graphene.Int())
     components = graphene.List(Component_Type)
     component = graphene.Field(type=Component_Type, id=graphene.Int())
@@ -74,6 +77,7 @@ class ComponentInput(graphene.InputObjectType):
     state = graphene.String(required=True)
     fk_chapter_id = graphene.ID(required=True)
     fk_component_type_id = graphene.ID(required=True)
+
 
 class IntroduceComponent(graphene.relay.ClientIDMutation):
     class Input:
