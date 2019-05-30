@@ -1,6 +1,7 @@
 import graphene
 import graphql_jwt
 from graphene_django.types import DjangoObjectType
+from graphql_jwt.decorators import login_required
 
 from api.models import Profile
 
@@ -9,15 +10,15 @@ class ProfileType(DjangoObjectType):
     class Meta:
         model = Profile
 
-    @classmethod
-    def get_node(cls, info, username):
-        return Profile.objects.get(user__username=username)
-
 
 class ProfileQuery(graphene.AbstractType):
     profile = graphene.Field(type=ProfileType, username=graphene.String())
     # Auth
     verify_token = graphql_jwt.Verify.Field()
+
+    @login_required
+    def resolve_profile(self, info, username):
+        return Profile.objects.get(user__username=username)
 
 
 class ProfileInput(graphene.InputObjectType):
