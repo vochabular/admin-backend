@@ -1,4 +1,5 @@
 import graphene
+from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 
@@ -9,6 +10,7 @@ from api.models import Word, WordAR, WordCH, WordDE, WordEN, WordFA, WordGroup
 class WordGroupType(DjangoObjectType):
     class Meta:
         model = WordGroup
+        interfaces = (graphene.relay.Node, )
 
     @classmethod
     def get_node(cls, info, id):
@@ -18,6 +20,7 @@ class WordGroupType(DjangoObjectType):
 class WordType(DjangoObjectType):
     class Meta:
         model = Word
+        interfaces = (graphene.relay.Node, )
 
     @classmethod
     def get_node(cls, info, id):
@@ -50,9 +53,9 @@ class WordARType(DjangoObjectType):
 
 
 class WordQuery(graphene.AbstractType):
-    word_groups = graphene.List(WordGroupType)
+    word_groups = DjangoFilterConnectionField(WordGroupType)
     word_group = graphene.Field(type=WordGroupType, id=graphene.ID())
-    words = graphene.List(WordType)
+    words = DjangoFilterConnectionField(WordType)
     word = graphene.Field(type=WordType, id=graphene.Int())
     words_ch = graphene.List(WordCHType)
     words_en = graphene.List(WordENType)
