@@ -1,6 +1,7 @@
 import graphene, graphql_jwt
 from django.contrib.auth.models import User
 from graphql_jwt.decorators import login_required
+from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
 
 from api.graphql.chapter import ChapterMutation, ChapterQuery
@@ -18,16 +19,22 @@ from api.models import (
 class TextType(DjangoObjectType):
     class Meta:
         model = Text
+        interfaces = (graphene.relay.Node, )
+        filter_fields = ['fk_component_id']
 
 
 class TranslationType(DjangoObjectType):
     class Meta:
         model = Translation
+        interfaces = (graphene.relay.Node, )
+        filter_fields = ['fk_text_id', 'language']
 
 
 class CommentType(DjangoObjectType):
     class Meta:
         model = Comment
+        interfaces = (graphene.relay.Node, )
+        filter_fields = ['fk_text_id']
 
     @classmethod
     def get_node(cls, info, id):
@@ -37,6 +44,8 @@ class CommentType(DjangoObjectType):
 class MediaType(DjangoObjectType):
     class Meta:
         model = Media
+        interfaces = (graphene.relay.Node, )
+        filter_fields = ['fk_component_id']
 
 
 class UserType(DjangoObjectType):
@@ -45,11 +54,11 @@ class UserType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType, ChapterQuery, ComponentQuery, WordQuery):
-    texts = graphene.List(TextType)
-    translations = graphene.List(TranslationType)
-    comments = graphene.List(CommentType)
+    texts = DjangoFilterConnectionField(TextType)
+    translations = DjangoFilterConnectionField(TranslationType)
+    comments = DjangoFilterConnectionField(CommentType)
     comment = graphene.Field(type=CommentType, id=graphene.Int())
-    media = graphene.List(MediaType)
+    media = DjangoFilterConnectionField(MediaType)
     # Auth
     verify_token = graphql_jwt.Verify.Field()
 

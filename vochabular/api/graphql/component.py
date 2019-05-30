@@ -20,6 +20,8 @@ class ComponentTypeType(DjangoObjectType):
 class Component_Type(DjangoObjectType):
     class Meta:
         model = Component
+        filter_fields = ['state']
+        interfaces = (graphene.relay.Node, )
 
     @classmethod
     def get_node(cls, info, id):
@@ -29,7 +31,7 @@ class Component_Type(DjangoObjectType):
 class ComponentQuery(graphene.AbstractType):
     component_types = DjangoFilterConnectionField(ComponentTypeType)
     component_type = graphene.Field(type=ComponentTypeType, id=graphene.Int())
-    components = graphene.List(Component_Type)
+    components = DjangoFilterConnectionField(Component_Type)
     component = graphene.Field(type=Component_Type, id=graphene.Int())
 
     @login_required
