@@ -39,7 +39,8 @@ class ChapterQuery(graphene.AbstractType):
 
 
 class ChapterInput(graphene.InputObjectType):
-    title = graphene.String(required=True)
+    titleCH = graphene.String(required=True)
+    titleDE = graphene.String(required=True)
     fk_belongs_to_id = graphene.ID()
     description = graphene.String(required=True)
     number = graphene.Int(required=True)
@@ -69,7 +70,8 @@ class UpdateChapter(graphene.relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, chapter_data, chapter_id):
         chapter = Chapter.objects.get(pk=chapter_id)
-        chapter.title = chapter_data.title
+        chapter.titleCH = chapter_data.titleCH
+        chapter.titleDE = chapter_data.titleDE
         chapter.fk_belongs_to_id = chapter_data.fk_belongs_to_id
         chapter.description = chapter_data.description
         chapter.number = chapter_data.number
