@@ -33,6 +33,7 @@ class CommentQuery(graphene.AbstractType):
 class CommentInput(graphene.InputObjectType):
     text = graphene.String(required=True)
     active =  graphene.Boolean(required=True)
+    fk_author_id = graphene.ID(required=True)
     context = graphene.String()
     fk_component_id = graphene.ID(required=True)
     fk_parent_comment_id = graphene.ID()
@@ -47,7 +48,6 @@ class IntroduceComment(graphene.relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, comment_data):
         comment = Comment(**comment_data)
-        comment.author_name = info.context.user
         comment.save()
 
         return IntroduceComment(comment=comment)
