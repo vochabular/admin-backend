@@ -113,14 +113,23 @@ class Text(models.Model):
 
 
 class Comment(models.Model):
-    comment = models.CharField(max_length=500)
+    CONTEXT_CHOICES = (
+        ('A', 'Approver'),
+        ('C', 'ContentCreator'),
+        ('T', 'Translator'),
+        ('I', 'Illustrator')
+    )
+
+    text = models.CharField(max_length=500)
     active = models.BooleanField()
+    context = models.CharField(max_length=1, choices=CONTEXT_CHOICES, null=True, blank=True)
     author_name = models.ForeignKey(User, on_delete=models.CASCADE)
     written = models.DateTimeField(default=datetime.now, null=True, blank=True)
-    fk_text = models.ForeignKey(Text, on_delete=models.CASCADE)
+    fk_component = models.ForeignKey(Component, on_delete=models.CASCADE)
+    fk_parent_comment = models.ForeignKey("Comment", on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.comment
+        return self.text
 
 
 class WordGroup(models.Model):
