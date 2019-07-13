@@ -1,6 +1,6 @@
-from django.contrib.auth import get_user_model
-from cryptography.x509 import load_pem_x509_certificate
 from cryptography.hazmat.backends import default_backend
+from cryptography.x509 import load_pem_x509_certificate
+from django.contrib.auth import get_user_model
 
 
 def user_handler(payload):

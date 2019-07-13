@@ -1,4 +1,5 @@
 import graphene
+from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 
@@ -8,6 +9,8 @@ from api.models import Component, ComponentType
 class ComponentTypeType(DjangoObjectType):
     class Meta:
         model = ComponentType
+        filter_fields = ['base']
+        interfaces = (graphene.relay.Node, )
 
     @classmethod
     def get_node(cls, info, id):
@@ -17,6 +20,8 @@ class ComponentTypeType(DjangoObjectType):
 class Component_Type(DjangoObjectType):
     class Meta:
         model = Component
+        filter_fields = ['state']
+        interfaces = (graphene.relay.Node, )
 
     @classmethod
     def get_node(cls, info, id):
@@ -24,9 +29,9 @@ class Component_Type(DjangoObjectType):
 
 
 class ComponentQuery(graphene.AbstractType):
-    component_types = graphene.List(ComponentTypeType)
+    component_types = DjangoFilterConnectionField(ComponentTypeType)
     component_type = graphene.Field(type=ComponentTypeType, id=graphene.Int())
-    components = graphene.List(Component_Type)
+    components = DjangoFilterConnectionField(Component_Type)
     component = graphene.Field(type=Component_Type, id=graphene.Int())
 
     @login_required
@@ -44,3 +49,78 @@ class ComponentQuery(graphene.AbstractType):
     @login_required
     def resolve_component(self, info, id):
         return Component.objects.get(id=id)
+
+
+class ComponentTypeInput(graphene.InputObjectType):
+    name = graphene.String(required=True)
+    schema = graphene.String(required=True)
+    base = graphene.Boolean()
+    icon = graphene.String(required=True)
+    label = graphene.String(required=True)
+    fk_parent_type_id = graphene.ID()
+
+
+class IntroduceComponentType(graphene.relay.ClientIDMutation):
+    class Input:
+        componentType_data = graphene.InputField(ComponentTypeInput)
+
+    componentType = graphene.Field(ComponentTypeType)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, componentType_data):
+        componentType = ComponentType(**componentType_data)
+        componentType.save()
+
+        return IntroduceComponentType(componentType=componentType)
+
+
+class ComponentTypeMutation(graphene.AbstractType):
+    create_component_type = IntroduceComponentType.Field()
+
+
+class ComponentInput(graphene.InputObjectType):
+    data = graphene.String(required=True)
+    state = graphene.String(required=True)
+    fk_chapter_id = graphene.ID(required=True)
+    fk_component_type_id = graphene.ID(required=True)
+    fk_locked_by_id = graphene.ID()
+    locked_ts = graphene.DateTime()
+
+
+class IntroduceComponent(graphene.relay.ClientIDMutation):
+    class Input:
+        component_data = graphene.InputField(ComponentInput)
+
+    component = graphene.Field(Component_Type)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, component_data):
+        component = Component(**component_data)
+        component.save()
+        return IntroduceComponent(component=component)
+
+
+class UpdateComponent(graphene.relay.ClientIDMutation):
+    class Input:
+        component_id = graphene.ID()
+        component_data = graphene.InputField(ComponentInput)
+
+    component = graphene.Field(Component_Type)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, component_data, component_id):
+        component = Component.objects.get(pk=component_id)
+        component.data = component_data.data
+        component.state = component_data.state
+        component.fk_chapter_id = component_data.fk_chapter_id
+        component.fk_component_type_id = component_data.fk_component_type_id
+        component.fk_locked_by_id = component_data.fk_locked_by_id
+        component.locked_ts = component_data.locked_ts
+        component.save()
+
+        return UpdateComponent(component=component)
+
+
+class ComponentMutation(graphene.AbstractType):
+    create_component = IntroduceComponent.Field()
+    update_component = UpdateComponent.Field()
