@@ -7,6 +7,8 @@ from api.models import Chapter
 
 
 class ChapterType(DjangoObjectType):
+    translation_progress = graphene.Float()
+
     class Meta:
         model = Chapter
         interfaces = (graphene.relay.Node, )
@@ -29,6 +31,9 @@ class ChapterQuery(graphene.AbstractType):
         ChapterType, filterset_class=ChapterFilter)
     chapter = graphene.Field(type=ChapterType, id=graphene.Int())
 
+    def resolve_name(self, args, info):
+        return self.instance.translation_progress
+
     @login_required
     def resolve_chapters(self, info, **kwargs):
         return Chapter.objects.all()
@@ -44,6 +49,7 @@ class ChapterInput(graphene.InputObjectType):
     fk_belongs_to_id = graphene.ID()
     description = graphene.String(required=True)
     number = graphene.Int(required=True)
+    languages = graphene.String(required=True)
 
 
 class IntroduceChapter(graphene.relay.ClientIDMutation):
@@ -55,6 +61,7 @@ class IntroduceChapter(graphene.relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, chapter_data):
         chapter = Chapter(**chapter_data)
+        chapter.clean_fields()
         chapter.save()
 
         return IntroduceChapter(chapter=chapter)

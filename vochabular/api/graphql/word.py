@@ -230,7 +230,7 @@ class WordMutation(graphene.AbstractType):
 
 def mutate_word(word_data, word_id, cls_name):
     word_cls = getattr(models, cls_name)
-    word = word_cls(id=word_id)
+    word = word_cls.objects.get(id=word_id)
     word.word_id = word_id
     word.text = word_data.text
     word.audio = word_data.audio
