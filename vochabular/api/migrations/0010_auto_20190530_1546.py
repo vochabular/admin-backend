@@ -10,14 +10,7 @@ class Migration(migrations.Migration):
         ('api', '0009_auto_20190530_1546'),
     ]
 
-    def insert_titles(apps, schema_editor):
-        for row in Chapter.objects.all():
-            row.titleDE = row.titleDE + " - " + str(row.number)
-            row.titleCH = row.titleDE + " - " + str(row.number)
-            row.save()
-
     operations = [
-        migrations.RunPython(insert_titles),
         migrations.AlterField(
             model_name='chapter',
             name='titleCH',

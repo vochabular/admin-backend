@@ -5,7 +5,15 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-class Profile(models.Model):
+class BaseModel(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class Profile(BaseModel):
     LANGUAGE_CHOICES = (
         ('DE', 'Deutsch'),
         ('EN', 'English')
@@ -32,7 +40,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
 
 
-class Chapter(models.Model):
+class Chapter(BaseModel):
     titleCH = models.CharField(max_length=100, unique=True)
     titleDE = models.CharField(max_length=100, unique=True)
     fk_belongs_to = models.ForeignKey(
@@ -47,7 +55,7 @@ class Chapter(models.Model):
         return self.titleDE
 
 
-class ComponentType(models.Model):
+class ComponentType(BaseModel):
     name = models.CharField(max_length=45)
     schema = models.TextField(max_length=100)
     base = models.BooleanField(default=False)
@@ -60,7 +68,7 @@ class ComponentType(models.Model):
         return self.name
 
 
-class Component(models.Model):
+class Component(BaseModel):
     STATE_CHOICES = (
         ('C', 'creation'),
         ('R', 'in review'),
@@ -84,7 +92,7 @@ class Component(models.Model):
         return 'Component:' + str(self.id)
 
 
-class Translation(models.Model):
+class Translation(BaseModel):
     language = models.CharField(max_length=45)
     text_field = models.CharField(max_length=45)
     valid = models.BooleanField()
@@ -94,7 +102,7 @@ class Translation(models.Model):
         return self.text_field
 
 
-class Media(models.Model):
+class Media(BaseModel):
     type = models.CharField(max_length=45)
     url = models.CharField(max_length=255)
     fk_component = models.ForeignKey(Component, on_delete=models.CASCADE)
@@ -103,7 +111,7 @@ class Media(models.Model):
         return 'ID :' + str(self.id) + 'Type: ' + self.type
 
 
-class Text(models.Model):
+class Text(BaseModel):
     translatable = models.BooleanField()
     fk_component = models.ForeignKey(Component, on_delete=models.CASCADE)
     master_translation = models.OneToOneField(
@@ -113,7 +121,7 @@ class Text(models.Model):
         return 'Text:' + str(self.id)
 
 
-class Comment(models.Model):
+class Comment(BaseModel):
     CONTEXT_CHOICES = (
         ('A', 'Approver'),
         ('C', 'ContentCreator'),
@@ -135,7 +143,7 @@ class Comment(models.Model):
         return self.text
 
 
-class WordGroup(models.Model):
+class WordGroup(BaseModel):
     fk_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
     title_ch = models.CharField(max_length=200, blank=True)
     title_de = models.CharField(max_length=200, blank=True)
@@ -145,12 +153,12 @@ class WordGroup(models.Model):
         return 'WordGroup:' + str(self.title_de)
 
 
-class Word(models.Model):
+class Word(BaseModel):
     def __str__(self):
         return 'Word:' + str(self.id)
 
 
-class WordCH(models.Model):
+class WordCH(BaseModel):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
     audio = models.CharField(max_length=255, null=True, blank=True)
@@ -160,7 +168,7 @@ class WordCH(models.Model):
         return 'CH:' + self.text
 
 
-class WordEN(models.Model):
+class WordEN(BaseModel):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
     audio = models.CharField(max_length=255, null=True, blank=True)
@@ -170,7 +178,7 @@ class WordEN(models.Model):
         return 'EN:' + self.text
 
 
-class WordDE(models.Model):
+class WordDE(BaseModel):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
     audio = models.CharField(max_length=255, null=True, blank=True)
@@ -180,7 +188,7 @@ class WordDE(models.Model):
         return 'DE:' + self.text
 
 
-class WordFA(models.Model):
+class WordFA(BaseModel):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
     audio = models.CharField(max_length=255, null=True, blank=True)
@@ -190,7 +198,7 @@ class WordFA(models.Model):
         return 'FA:' + self.text
 
 
-class WordAR(models.Model):
+class WordAR(BaseModel):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
     audio = models.CharField(max_length=255, null=True, blank=True)
