@@ -68,7 +68,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'vochabular.wsgi.application'
 
 sentry_sdk.init(
-    dsn="https://b819fde7370044a2914e9b2d36a53273@sentry.io/1427424",
+    dsn="https://" + os.environ['SENTRY'],
     integrations=[DjangoIntegration()]
 )
 
