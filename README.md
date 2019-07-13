@@ -30,7 +30,7 @@ This is a python django application providing a GraphQL API to the SPA. It uses 
 ```
 query {
   chapters {
-    title,
+    titleDE,
     text
   }
 }
@@ -38,9 +38,9 @@ query {
 
 ```
 mutation {
-  createChapter(input: {chapterData: {title: "title", text: "asdf"}}) {
+  createChapter(input: {chapterData: {titleCH: "title CH", titleDE: "title DE", text: "asdf"}}) {
     chapter{
-      title,
+      titleCH,
       text
     }
   }
