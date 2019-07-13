@@ -15,8 +15,8 @@ class BaseModel(models.Model):
 
 class Profile(BaseModel):
     LANGUAGE_CHOICES = (
-        ('DE', 'Deutsch'),
-        ('EN', 'English')
+        ('de', 'Deutsch'),
+        ('en', 'English')
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -25,7 +25,7 @@ class Profile(BaseModel):
     roles = models.CharField(max_length=120)
     current_role = models.CharField(max_length=30)
     language = models.CharField(
-        max_length=2, choices=LANGUAGE_CHOICES, default='DE')
+        max_length=2, choices=LANGUAGE_CHOICES, default=LANGUAGE_CHOICES[0])
     translator_languages = models.CharField(max_length=200)
     event_notifications = models.BooleanField(default=True)
     setup_completed = models.BooleanField(default=False)
@@ -47,6 +47,16 @@ class Chapter(BaseModel):
         'self', on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField(max_length=500)
     number = models.IntegerField()
+
+    @property
+    def translation_progress(self):
+        for chapter in Chapter.objects.all().filter(fk_belongs_to=self):
+            for component in Component.objects.all().filter(fk_chapter=chapter):
+                for text in Text.objects.all().filter(fk_text=component):
+                    print(text.id)
+                print(component.id)
+            print(chapter.id)
+        return 1
 
     class Meta:
         unique_together = ('titleDE', 'number',)

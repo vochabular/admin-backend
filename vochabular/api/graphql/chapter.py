@@ -7,6 +7,8 @@ from api.models import Chapter
 
 
 class ChapterType(DjangoObjectType):
+    translation_progress = graphene.Float()
+
     class Meta:
         model = Chapter
         interfaces = (graphene.relay.Node, )
@@ -28,6 +30,9 @@ class ChapterQuery(graphene.AbstractType):
     chapters = DjangoFilterConnectionField(
         ChapterType, filterset_class=ChapterFilter)
     chapter = graphene.Field(type=ChapterType, id=graphene.Int())
+
+    def resolve_name(self, args, info):
+        return self.instance.translation_progress
 
     @login_required
     def resolve_chapters(self, info, **kwargs):
