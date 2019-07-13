@@ -3,7 +3,7 @@ from graphql_jwt.decorators import login_required
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
 
-from api.models import Text, Translation
+from api.models import Text, Translation, LANGUAGES
 
 
 class TextType(DjangoObjectType):
@@ -23,9 +23,23 @@ class TranslationType(DjangoObjectType):
         filter_fields = ['fk_text_id', 'language']
 
 
+class LanguageType(graphene.ObjectType):
+    name = graphene.String()
+    description = graphene.String()
+
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+
+
 class TextQuery(graphene.AbstractType):
     texts = DjangoFilterConnectionField(TextType)
     translations = DjangoFilterConnectionField(TranslationType)
+    languages = graphene.List(LanguageType)
+
+    @login_required
+    def resolve_languages(self, info, **kwargs):
+        return [LanguageType(lang, desc) for lang, desc in LANGUAGES.items()]
 
     @login_required
     def resolve_texts(self, info, **kwargs):
@@ -66,7 +80,7 @@ class IntroduceTranslation(graphene.relay.ClientIDMutation):
     class Input:
         translation_data = graphene.InputField(TranslationInput)
 
-    translation = graphene.Field(TextType)
+    translation = graphene.Field(TranslationType)
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, translation_data):

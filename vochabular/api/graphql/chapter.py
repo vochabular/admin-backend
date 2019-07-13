@@ -49,6 +49,7 @@ class ChapterInput(graphene.InputObjectType):
     fk_belongs_to_id = graphene.ID()
     description = graphene.String(required=True)
     number = graphene.Int(required=True)
+    languages = graphene.String(required=True)
 
 
 class IntroduceChapter(graphene.relay.ClientIDMutation):
@@ -60,6 +61,7 @@ class IntroduceChapter(graphene.relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, chapter_data):
         chapter = Chapter(**chapter_data)
+        chapter.clean_fields()
         chapter.save()
 
         return IntroduceChapter(chapter=chapter)

@@ -1,8 +1,18 @@
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+
+LANGUAGES = {
+    "de": "Deutsch",
+    "ch": "Schweizerdeutsch",
+    "en": "Englisch",
+    "ar": "Arabisch",
+    "fa": "Farsi"
+}
 
 
 class BaseModel(models.Model):
@@ -40,6 +50,12 @@ def create_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
 
 
+def validate_languages(value):
+    for lang in value.split(","):
+        if not LANGUAGES[lang]:
+            raise ValidationError('%(value)s is not a valid lanuage', params={'value': lang},)
+
+
 class Chapter(BaseModel):
     titleCH = models.CharField(max_length=100, unique=True)
     titleDE = models.CharField(max_length=100, unique=True)
@@ -47,16 +63,36 @@ class Chapter(BaseModel):
         'self', on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField(max_length=500)
     number = models.IntegerField()
+    languages = models.CharField(max_length=50, validators=[validate_languages])
 
     @property
     def translation_progress(self):
-        for chapter in Chapter.objects.all().filter(fk_belongs_to=self):
-            for component in Component.objects.all().filter(fk_chapter=chapter):
-                for text in Text.objects.all().filter(fk_text=component):
-                    print(text.id)
-                print(component.id)
-            print(chapter.id)
-        return 1
+        # Get translations from chapter
+        total, valid = self.translations()
+
+        if total == 0:
+            return 1
+        return valid/total
+
+    def translations(self):
+        total = 0
+        valid = 0
+        chapters = Chapter.objects.all().filter(fk_belongs_to=self)
+        if len(chapters) > 0:
+            for chapter in chapters:
+                # Get translations from subchapter
+                stotal, svalid = chapter.translations()
+                total += stotal
+                valid += svalid
+        else:
+            for component in Component.objects.all().filter(fk_chapter=self):
+                for text in Text.objects.all().filter(fk_component=component):
+                    for translation in Translation.objects.all().filter(fk_text=text):
+                        total = total + 1
+                        if translation.valid:
+                            valid = valid + 1
+            
+        return (total, valid)
 
     class Meta:
         unique_together = ('titleDE', 'number',)
@@ -98,6 +134,8 @@ class Component(BaseModel):
         Profile, on_delete=models.SET_NULL, null=True, blank=True)
     locked_ts = models.DateTimeField(auto_now=True)
 
+    # TODO(worxli): Make sure a component is not created on a chapter that has subchapters.
+
     def __str__(self):
         return 'Component:' + str(self.id)
 
@@ -107,6 +145,9 @@ class Translation(BaseModel):
     text_field = models.CharField(max_length=45)
     valid = models.BooleanField()
     fk_text = models.ForeignKey('Text', on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['language', 'fk_text']
 
     def __str__(self):
         return self.text_field
