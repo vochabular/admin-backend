@@ -35,7 +35,7 @@ class Profile(BaseModel):
     roles = models.CharField(max_length=120)
     current_role = models.CharField(max_length=30)
     language = models.CharField(
-        max_length=2, choices=LANGUAGE_CHOICES, default=LANGUAGE_CHOICES[0])
+        max_length=2, choices=LANGUAGE_CHOICES, default=LANGUAGE_CHOICES[0][0])
     translator_languages = models.CharField(max_length=200)
     event_notifications = models.BooleanField(default=True)
     setup_completed = models.BooleanField(default=False)
@@ -53,7 +53,8 @@ def create_user_profile(sender, instance, created, **kwargs):
 def validate_languages(value):
     for lang in value.split(","):
         if not LANGUAGES[lang]:
-            raise ValidationError('%(value)s is not a valid lanuage', params={'value': lang},)
+            raise ValidationError(
+                '%(value)s is not a valid lanuage', params={'value': lang},)
 
 
 class Chapter(BaseModel):
@@ -63,7 +64,8 @@ class Chapter(BaseModel):
         'self', on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField(max_length=500)
     number = models.IntegerField()
-    languages = models.CharField(max_length=50, validators=[validate_languages])
+    languages = models.CharField(
+        max_length=50, validators=[validate_languages])
 
     @property
     def translation_progress(self):
@@ -184,7 +186,8 @@ class Comment(BaseModel):
     active = models.BooleanField()
     context = models.CharField(
         max_length=1, choices=CONTEXT_CHOICES, null=True, blank=True)
-    fk_author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
+    fk_author = models.ForeignKey(
+        Profile, on_delete=models.SET_NULL, null=True)
     written = models.DateTimeField(default=datetime.now, null=True, blank=True)
     fk_component = models.ForeignKey(Component, on_delete=models.CASCADE)
     fk_parent_comment = models.ForeignKey(
