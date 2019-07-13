@@ -84,7 +84,8 @@ class Component(BaseModel):
     state = models.CharField(max_length=1, choices=STATE_CHOICES, default='0')
     fk_component = models.ForeignKey(
         'self', on_delete=models.CASCADE, null=True, blank=True)
-    fk_locked_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    fk_locked_by = models.ForeignKey(
+        Profile, on_delete=models.SET_NULL, null=True, blank=True)
     locked_ts = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -130,11 +131,13 @@ class Comment(BaseModel):
 
     text = models.CharField(max_length=500)
     active = models.BooleanField()
-    context = models.CharField(max_length=1, choices=CONTEXT_CHOICES, null=True, blank=True)
-    author_name = models.ForeignKey(User, on_delete=models.CASCADE)
+    context = models.CharField(
+        max_length=1, choices=CONTEXT_CHOICES, null=True, blank=True)
+    fk_author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
     written = models.DateTimeField(default=datetime.now, null=True, blank=True)
     fk_component = models.ForeignKey(Component, on_delete=models.CASCADE)
-    fk_parent_comment = models.ForeignKey("Comment", on_delete=models.CASCADE, null=True)
+    fk_parent_comment = models.ForeignKey(
+        "Comment", on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.text
