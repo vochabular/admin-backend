@@ -6,8 +6,21 @@ from graphql_jwt.decorators import login_required
 from api.models import Chapter
 
 
+class ProgressType(graphene.ObjectType):
+    lang = graphene.String()
+    progress = graphene.Float()
+
+    @staticmethod
+    def resolve_lang(parent, info):
+        return parent['lang']
+
+    @staticmethod
+    def resolve_progress(parent, info):
+        return parent['progress']
+
+
 class ChapterType(DjangoObjectType):
-    translation_progress = graphene.Float()
+    translation_progress = graphene.List(ProgressType)
 
     class Meta:
         model = Chapter
