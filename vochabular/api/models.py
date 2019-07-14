@@ -1,3 +1,4 @@
+from collections import defaultdict
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
@@ -71,29 +72,35 @@ class Chapter(BaseModel):
     def translation_progress(self):
         # Get translations from chapter
         total, valid = self.translations()
+        progress = []
+        for lang, total in total.items():
+            if total == 0:
+                progress.append({"lang": lang, "progress": 1})
+            else:
+                progress.append({"lang": lang, "progress": valid[lang]/total})
 
-        if total == 0:
-            return 1
-        return valid/total
+        return progress
 
     def translations(self):
-        total = 0
-        valid = 0
+        total = defaultdict(int)
+        valid = defaultdict(int)
         chapters = Chapter.objects.all().filter(fk_belongs_to=self)
         if len(chapters) > 0:
             for chapter in chapters:
                 # Get translations from subchapter
                 stotal, svalid = chapter.translations()
-                total += stotal
-                valid += svalid
+                for lang, num in stotal.items():
+                    total[lang] += num
+                for lang, num in svalid.items():
+                    valid[lang] += num
         else:
             for component in Component.objects.all().filter(fk_chapter=self):
                 for text in Text.objects.all().filter(fk_component=component):
                     for translation in Translation.objects.all().filter(fk_text=text):
-                        total = total + 1
+                        total[translation.language] += 1
                         if translation.valid:
-                            valid = valid + 1
-            
+                            valid[translation.language] += 1
+
         return (total, valid)
 
     class Meta:
