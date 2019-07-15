@@ -146,3 +146,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # CORS: Should later be a whitelist and not ALLOW-ALL
 CORS_ORIGIN_ALLOW_ALL = True
+
+# S3
+os.environ.setdefault('AWS_ACCESS_KEY_ID', 'test')
+os.environ.setdefault('AWS_SECRET_ACCESS_KEY', 'test')
+AWS_STORAGE_BUCKET_NAME = 'vochabular-admin'
