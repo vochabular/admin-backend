@@ -3,21 +3,7 @@
 from django.db import migrations, models
 import django.db.models.deletion
 from api.models import Language
-
-
-LANGUAGES = [
-    ["de", "Deutsch"],
-    ["ch", "Schweizerdeutsch"],
-    ["en", "Englisch"],
-    ["ar", "Arabisch"],
-    ["fa", "Farsi"]
-]
-
-
-def insertLanguages(apps, schema_editor):
-    for lang in LANGUAGES:
-        language = Language(code=lang[0], name=lang[1])
-        language.save()
+import uuid
 
 
 class Migration(migrations.Migration):
@@ -41,7 +27,6 @@ class Migration(migrations.Migration):
                 'abstract': False,
             },
         ),
-        migrations.RunPython(insertLanguages),
         migrations.CreateModel(
             name='WordTranslation',
             fields=[
