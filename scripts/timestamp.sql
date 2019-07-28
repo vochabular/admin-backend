@@ -40,7 +40,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION __set_modified_date() RETURNS TRIGGER AS $$
 BEGIN
-  NEW.modified = NOW();
+  NEW.updated = NOW();
 RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
