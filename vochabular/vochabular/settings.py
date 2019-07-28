@@ -96,13 +96,6 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Database
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 # TODO(worxli): use this in docker
 DATABASES = {
     'default': {
