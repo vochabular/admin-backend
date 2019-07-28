@@ -9,6 +9,7 @@ select "hello" from __set_all_modified_triggers()
 CREATE OR REPLACE FUNCTION __set_creation_date() RETURNS TRIGGER AS $$
 BEGIN
   NEW.created = NOW();
+  NEW.updated = NOW();
 RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
