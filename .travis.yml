@@ -4,6 +4,11 @@ python:
 install:
   - pip install -r requirements.txt
 
+addons:
+  postgresql: "9.4"
+services:
+  - postgresql
+
 jobs:
   include:
     - stage: test

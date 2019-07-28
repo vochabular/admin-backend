@@ -214,7 +214,7 @@ class Word(BaseModel):
 
 class WordTranslation(BaseModel):
     text = models.CharField(max_length=40)
-    word = models.OneToOneField(Word, on_delete=models.CASCADE)
+    word = models.ForeignKey(Word, on_delete=models.CASCADE)
     audio = models.CharField(max_length=255, null=True, blank=True)
     example_sentence = models.CharField(max_length=500, null=True, blank=True)
     fk_language = models.ForeignKey(Language, on_delete=models.CASCADE)
