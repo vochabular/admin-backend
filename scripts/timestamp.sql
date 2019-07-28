@@ -8,7 +8,7 @@ select "hello" from __set_all_modified_triggers()
 
 CREATE OR REPLACE FUNCTION __set_creation_date() RETURNS TRIGGER AS $$
 BEGIN
-  NEW.creation_date = NOW();
+  NEW.created = NOW();
 RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -40,7 +40,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION __set_modified_date() RETURNS TRIGGER AS $$
 BEGIN
-  NEW.last_modified_date = NOW();
+  NEW.modified = NOW();
 RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
