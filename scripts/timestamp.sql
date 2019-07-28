@@ -12,6 +12,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- CREATION_DATE: Set for all tables that have the creation_date column:
+CREATE OR REPLACE FUNCTION __set_all_created_triggers() RETURNS FUNCTION AS $$
+BEGIN
 DO $$
 DECLARE
     t text;
