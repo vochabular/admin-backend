@@ -1,7 +1,9 @@
 /***
 
 Functions and triggers to insert automatically creation date and modifaction date
-
+Can be called from CI/migrations:
+select "hello" from __set_all_created_triggers()
+select "hello" from __set_all_modified_triggers()
 */
 
 CREATE OR REPLACE FUNCTION __set_creation_date() RETURNS TRIGGER AS $$
@@ -12,9 +14,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- CREATION_DATE: Set for all tables that have the creation_date column:
-CREATE OR REPLACE FUNCTION __set_all_created_triggers() RETURNS FUNCTION AS $$
-BEGIN
-DO $$
+CREATE OR REPLACE FUNCTION __set_all_created_triggers() returns void as $$
 DECLARE
     t text;
 BEGIN
@@ -46,7 +46,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- CREATION_DATE: Set for all tables that have the creation_date column:
-DO $$
+CREATE OR REPLACE FUNCTION __set_all_modified_triggers() returns void as $$
 DECLARE
     t text;
 BEGIN

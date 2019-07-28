@@ -2,6 +2,13 @@
 
 from django.db import migrations, models
 
+def getTimestampSQL():
+    f = open("scripts/timestamp.sql","r") 
+    return f.read()
+
+def getUUIDSQL():
+    f = open("scripts/uuid.sql","r") 
+    return f.read()
 
 class Migration(migrations.Migration):
 
@@ -10,7 +17,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunSQL("select 'hello world' from __alter_uuid_default();")
-        migrations.RunSQL("select 'hello world' from __set_creation_date();")
-        migrations.RunSQL("select 'hello world' from __set_modified_date();")
+        migrations.RunSQL(getTimestampSQL()),
+        migrations.RunSQL(getUUIDSQL()),
+        migrations.RunSQL("select 'hello world' from __alter_uuid_default();"),
+        migrations.RunSQL("select 'hello world' from __set_all_created_triggers();"),
+        migrations.RunSQL("select 'hello world' from __set_all_modified_triggers();"),
     ]
