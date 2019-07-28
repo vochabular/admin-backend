@@ -3,7 +3,7 @@ from graphql_jwt.decorators import login_required
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
 
-from api.models import Text, Translation, LANGUAGES
+from api.models import Text, Translation
 
 
 class TextType(DjangoObjectType):
@@ -12,7 +12,7 @@ class TextType(DjangoObjectType):
         interfaces = (graphene.relay.Node, )
         filter_fields = [
             'fk_component_id',
-            'translation__language',
+            'translation__fk_language_id',
             'translation__valid']
 
 
@@ -20,7 +20,7 @@ class TranslationType(DjangoObjectType):
     class Meta:
         model = Translation
         interfaces = (graphene.relay.Node, )
-        filter_fields = ['fk_text_id', 'language']
+        filter_fields = ['fk_text_id', 'fk_language_id']
 
 
 class LanguageType(graphene.ObjectType):
@@ -35,11 +35,6 @@ class LanguageType(graphene.ObjectType):
 class TextQuery(graphene.AbstractType):
     texts = DjangoFilterConnectionField(TextType)
     translations = DjangoFilterConnectionField(TranslationType)
-    languages = graphene.List(LanguageType)
-
-    @login_required
-    def resolve_languages(self, info, **kwargs):
-        return [LanguageType(lang, desc) for lang, desc in LANGUAGES.items()]
 
     @login_required
     def resolve_texts(self, info, **kwargs):
