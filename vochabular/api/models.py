@@ -1,7 +1,7 @@
 from collections import defaultdict
+from django.conf import settings
 from django.db import models
 from datetime import datetime
-from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
@@ -55,7 +55,7 @@ class Character(BaseModel):
 
 
 class Profile(BaseModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
     roles = models.CharField(max_length=120)
@@ -69,7 +69,7 @@ class Profile(BaseModel):
         return self.user.username + ": " + self.firstname + " " + self.lastname
 
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
@@ -144,6 +144,18 @@ class ComponentType(BaseModel):
     def __str__(self):
         return self.name
 
+    def isTitle(self):
+        return self.label == "title"
+
+    def isText(self):
+        return self.label == "text"
+
+    def isDialogue(self):
+        return self.label == "dialog"
+
+    def isBubble(self):
+        return self.label == "bubble"
+
 
 class Component(BaseModel):
     STATE_CHOICES = (
@@ -191,7 +203,7 @@ class Media(BaseModel):
     fk_component = models.ForeignKey(Component, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return 'ID :' + str(self.id) + 'Type: ' + self.type
+        return 'ID: ' + str(self.id) + 'Type: ' + self.type
 
 
 class Text(BaseModel):
@@ -200,7 +212,7 @@ class Text(BaseModel):
     placeholder = models.TextField(null=True)
 
     def __str__(self):
-        return 'Text:' + str(self.id)
+        return 'Text: ' + str(self.id)
 
 
 class Comment(BaseModel):

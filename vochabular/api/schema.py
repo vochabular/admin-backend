@@ -7,6 +7,7 @@ from api.graphql.comment import CommentMutation, CommentQuery
 from api.graphql.text import TextMutation, TextQuery
 from api.graphql.media import MediaQuery
 from api.graphql.language import LanguageQuery
+from api.graphql.xml import XMLQuery
 
 
 class Query(
@@ -18,7 +19,8 @@ class Query(
     CommentQuery,
     TextQuery,
     MediaQuery,
-    LanguageQuery
+    LanguageQuery,
+    XMLQuery
 ):
     pass
 
