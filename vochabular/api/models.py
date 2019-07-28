@@ -7,21 +7,20 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-LANGUAGES = {
-    "de": "Deutsch",
-    "ch": "Schweizerdeutsch",
-    "en": "Englisch",
-    "ar": "Arabisch",
-    "fa": "Farsi"
-}
-
-
 class BaseModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
+
+
+class Language(BaseModel):
+    code = models.CharField(max_length=20)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.code + ": " + self.name
 
 
 class Profile(BaseModel):
@@ -51,13 +50,6 @@ def create_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
 
 
-def validate_languages(value):
-    for lang in value.split(","):
-        if not LANGUAGES[lang]:
-            raise ValidationError(
-                '%(value)s is not a valid lanuage', params={'value': lang},)
-
-
 class Chapter(BaseModel):
     titleCH = models.CharField(max_length=100, unique=True)
     titleDE = models.CharField(max_length=100, unique=True)
@@ -65,8 +57,7 @@ class Chapter(BaseModel):
         'self', on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField(max_length=500)
     number = models.IntegerField()
-    languages = models.CharField(
-        max_length=50, validators=[validate_languages])
+    languages = models.ManyToManyField("Language")
 
     @property
     def translation_progress(self):
@@ -150,13 +141,13 @@ class Component(BaseModel):
 
 
 class Translation(BaseModel):
-    language = models.CharField(max_length=45)
+    fk_language = models.ForeignKey(Language, on_delete=models.CASCADE)
     text_field = models.CharField(max_length=45)
     valid = models.BooleanField()
     fk_text = models.ForeignKey('Text', on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ['language', 'fk_text']
+        unique_together = ['fk_language', 'fk_text']
 
     def __str__(self):
         return self.text_field
@@ -219,51 +210,12 @@ class Word(BaseModel):
         return 'Word:' + str(self.id)
 
 
-class WordCH(BaseModel):
+class WordTranslation(BaseModel):
     text = models.CharField(max_length=40)
     word = models.OneToOneField(Word, on_delete=models.CASCADE)
     audio = models.CharField(max_length=255, null=True, blank=True)
     example_sentence = models.CharField(max_length=500, null=True, blank=True)
+    fk_language = models.ForeignKey(Language, on_delete=models.CASCADE)
 
     def __str__(self):
-        return 'CH:' + self.text
-
-
-class WordEN(BaseModel):
-    text = models.CharField(max_length=40)
-    word = models.OneToOneField(Word, on_delete=models.CASCADE)
-    audio = models.CharField(max_length=255, null=True, blank=True)
-    example_sentence = models.CharField(max_length=500, null=True, blank=True)
-
-    def __str__(self):
-        return 'EN:' + self.text
-
-
-class WordDE(BaseModel):
-    text = models.CharField(max_length=40)
-    word = models.OneToOneField(Word, on_delete=models.CASCADE)
-    audio = models.CharField(max_length=255, null=True, blank=True)
-    example_sentence = models.CharField(max_length=500, null=True, blank=True)
-
-    def __str__(self):
-        return 'DE:' + self.text
-
-
-class WordFA(BaseModel):
-    text = models.CharField(max_length=40)
-    word = models.OneToOneField(Word, on_delete=models.CASCADE)
-    audio = models.CharField(max_length=255, null=True, blank=True)
-    example_sentence = models.CharField(max_length=500, null=True, blank=True)
-
-    def __str__(self):
-        return 'FA:' + self.text
-
-
-class WordAR(BaseModel):
-    text = models.CharField(max_length=40)
-    word = models.OneToOneField(Word, on_delete=models.CASCADE)
-    audio = models.CharField(max_length=255, null=True, blank=True)
-    example_sentence = models.CharField(max_length=500, null=True, blank=True)
-
-    def __str__(self):
-        return 'AR:' + self.text
+        return 'Translated Word:' + self.text

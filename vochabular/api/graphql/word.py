@@ -4,7 +4,7 @@ from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 
 from api import models
-from api.models import Word, WordAR, WordCH, WordDE, WordEN, WordFA, WordGroup
+from api.models import Word, WordTranslation, WordGroup
 
 
 class WordGroupType(DjangoObjectType):
@@ -27,41 +27,11 @@ class WordType(DjangoObjectType):
         return WordType.objects.get(id)
 
 
-class WordCHType(DjangoObjectType):
-    class Meta:
-        model = WordCH
-
-
-class WordENType(DjangoObjectType):
-    class Meta:
-        model = WordEN
-
-
-class WordDEType(DjangoObjectType):
-    class Meta:
-        model = WordDE
-
-
-class WordFAType(DjangoObjectType):
-    class Meta:
-        model = WordFA
-
-
-class WordARType(DjangoObjectType):
-    class Meta:
-        model = WordAR
-
-
 class WordQuery(graphene.AbstractType):
     word_groups = DjangoFilterConnectionField(WordGroupType)
     word_group = graphene.Field(type=WordGroupType, id=graphene.ID())
     words = graphene.List(WordType)
     word = graphene.Field(type=WordType, id=graphene.Int())
-    words_ch = graphene.List(WordCHType)
-    words_en = graphene.List(WordENType)
-    words_de = graphene.List(WordDEType)
-    words_fa = graphene.List(WordFAType)
-    words_ar = graphene.List(WordARType)
 
     @login_required
     def resolve_word_groups(self, info, **kwargs):
@@ -78,26 +48,6 @@ class WordQuery(graphene.AbstractType):
     @login_required
     def resolve_word(self, info, id):
         return Word.objects.get(id=id)
-
-    @login_required
-    def resolve_words_ch(self, info, **kwargs):
-        return WordCH.objects.all()
-
-    @login_required
-    def resolve_words_en(self, info, **kwargs):
-        return WordEN.objects.all()
-
-    @login_required
-    def resolve_words_de(self, info, **kwargs):
-        return WordDE.objects.all()
-
-    @login_required
-    def resolve_words_fa(self, info, **kwargs):
-        return WordFA.objects.all()
-
-    @login_required
-    def resolve_words_ar(self, info, **kwargs):
-        return WordAR.objects.all()
 
 
 class WordGroupInput(graphene.InputObjectType):
@@ -147,22 +97,8 @@ class IntroduceWord(graphene.relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info):
         word = Word()
         word.save()
-        cls.create_word_translations(word)
 
         return IntroduceWord(word=word)
-
-    @classmethod
-    def create_word_translations(cls, word):
-        wordCH = WordCH(word=word)
-        wordCH.save()
-        wordEN = WordEN(word=word)
-        wordEN.save()
-        wordDE = WordDE(word=word)
-        wordDE.save()
-        wordFA = WordFA(word=word)
-        wordFA.save()
-        wordAR = WordAR(word=word)
-        wordAR.save()
 
 
 class TranslatedWordInput(graphene.InputObjectType):
@@ -177,63 +113,7 @@ class UpdateTranslatedWord():
         word_data = graphene.InputField(TranslatedWordInput)
 
 
-class UpdateWordDE(UpdateTranslatedWord, graphene.relay.ClientIDMutation):
-    word = graphene.Field(WordDEType)
-
-    @classmethod
-    def mutate_and_get_payload(cls, root, info, word_data, word_id):
-        return UpdateWordDE(word=mutate_word(word_data, word_id, "WordDE"))
-
-
-class UpdateWordCH(UpdateTranslatedWord, graphene.relay.ClientIDMutation):
-    word = graphene.Field(WordCHType)
-
-    @classmethod
-    def mutate_and_get_payload(cls, root, info, word_data, word_id):
-        return UpdateWordCH(word=mutate_word(word_data, word_id, "WordCH"))
-
-
-class UpdateWordEN(UpdateTranslatedWord, graphene.relay.ClientIDMutation):
-    word = graphene.Field(WordENType)
-
-    @classmethod
-    def mutate_and_get_payload(cls, root, info, word_data, word_id):
-        return UpdateWordEN(word=mutate_word(word_data, word_id, "WordEN"))
-
-
-class UpdateWordFA(UpdateTranslatedWord, graphene.relay.ClientIDMutation):
-    word = graphene.Field(WordFAType)
-
-    @classmethod
-    def mutate_and_get_payload(cls, root, info, word_data, word_id):
-        return UpdateWordFA(word=mutate_word(word_data, word_id, "WordFA"))
-
-
-class UpdateWordAR(UpdateTranslatedWord, graphene.relay.ClientIDMutation):
-    word = graphene.Field(WordARType)
-
-    @classmethod
-    def mutate_and_get_payload(cls, root, info, word_data, word_id):
-        return UpdateWordAR(word=mutate_word(word_data, word_id, "WordAR"))
-
-
 class WordMutation(graphene.AbstractType):
     create_word = IntroduceWord.Field()
     create_word_group = IntroduceWordGroup.Field()
     update_word_group = UpdateWordGroup.Field()
-    update_de_word = UpdateWordDE.Field()
-    update_ch_word = UpdateWordCH.Field()
-    update_en_word = UpdateWordEN.Field()
-    update_fa_word = UpdateWordFA.Field()
-    update_ar_word = UpdateWordAR.Field()
-
-
-def mutate_word(word_data, word_id, cls_name):
-    word_cls = getattr(models, cls_name)
-    word = word_cls.objects.get(id=word_id)
-    word.word_id = word_id
-    word.text = word_data.text
-    word.audio = word_data.audio
-    word.example_sentence = word_data.example_sentence
-    word.save()
-    return word
