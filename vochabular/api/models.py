@@ -163,6 +163,7 @@ class Component(BaseModel):
     fk_locked_by = models.ForeignKey(
         Profile, on_delete=models.SET_NULL, null=True, blank=True)
     locked_ts = models.DateTimeField(auto_now=True)
+    order_in_chapter = models.PositiveIntegerField()
 
     # TODO(worxli): Make sure a component is not created on a chapter that has subchapters.
 
