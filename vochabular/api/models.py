@@ -26,6 +26,13 @@ class Language(BaseModel):
         return self.code + ": " + self.name
 
 
+class Book(BaseModel):
+    number = models.IntegerField()
+
+    def __str__(self):
+        return "Book number: " + self.number
+
+
 class Profile(BaseModel):
     LANGUAGE_CHOICES = (
         ('de', 'Deutsch'),
@@ -61,6 +68,7 @@ class Chapter(BaseModel):
     description = models.CharField(max_length=500)
     number = models.IntegerField()
     languages = models.ManyToManyField("Language")
+    fk_book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True, blank=True)
 
     @property
     def translation_progress(self):
