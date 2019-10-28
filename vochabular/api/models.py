@@ -33,6 +33,27 @@ class Book(BaseModel):
         return "Book number: " + self.number
 
 
+class Character(BaseModel):
+    GENDERS = (('f', 'Female'), ('m', 'Male'))
+    formal_name = models.CharField(max_length=45)
+    informal_name = models.CharField(max_length=45)
+    gender = models.CharField(
+        max_length=1, choices=GENDERS, default=GENDERS[0][0], null=True)
+    title = models.CharField(max_length=45, null=True)
+    speaker = models.CharField(max_length=45, null=True)
+    fk_book = models.ForeignKey(
+        Book, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        unique_together = [
+            ['formal_name', 'fk_book'],
+            ['informal_name', 'fk_book']
+        ]
+
+    def __str__(self):
+        return self.formal_name
+
+
 class Profile(BaseModel):
     LANGUAGE_CHOICES = (
         ('de', 'Deutsch'),
@@ -68,7 +89,8 @@ class Chapter(BaseModel):
     description = models.CharField(max_length=500)
     number = models.IntegerField()
     languages = models.ManyToManyField("Language")
-    fk_book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True, blank=True)
+    fk_book = models.ForeignKey(
+        Book, on_delete=models.SET_NULL, null=True, blank=True)
 
     @property
     def translation_progress(self):
@@ -106,7 +128,7 @@ class Chapter(BaseModel):
         return (total, valid)
 
     class Meta:
-        unique_together = ('titleDE', 'number',)
+        unique_together = ['titleDE', 'number']
 
     def __str__(self):
         return self.titleDE
@@ -120,6 +142,8 @@ class ComponentType(BaseModel):
     label = models.CharField(max_length=45)
     fk_parent_type = models.ForeignKey(
         'self', on_delete=models.CASCADE, null=True, blank=True)
+    fk_frontend_widget = models.ForeignKey(
+        'self', on_delete=models.SET_NULL, null=True, blank=True, related_name='frontend_widget')
 
     def __str__(self):
         return self.name
@@ -207,7 +231,7 @@ class Comment(BaseModel):
 
 
 class WordGroup(BaseModel):
-    fk_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+    fk_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, null=True)
     title_ch = models.CharField(max_length=200, blank=True)
     title_de = models.CharField(max_length=200, blank=True)
     words = models.ManyToManyField("Word")
