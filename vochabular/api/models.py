@@ -18,7 +18,7 @@ class BaseModel(models.Model):
 
 
 class Language(BaseModel):
-    code = models.CharField(max_length=20)
+    code = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
 
     def __str__(self):
