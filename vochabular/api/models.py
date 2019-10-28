@@ -2,6 +2,7 @@ from collections import defaultdict
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -18,11 +19,18 @@ class BaseModel(models.Model):
 
 
 class Language(BaseModel):
-    code = models.CharField(max_length=20)
+    code = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.code + ": " + self.name
+
+
+class Book(BaseModel):
+    number = models.IntegerField()
+
+    def __str__(self):
+        return "Book number: " + self.number
 
 
 class Profile(BaseModel):
@@ -60,6 +68,7 @@ class Chapter(BaseModel):
     description = models.CharField(max_length=500)
     number = models.IntegerField()
     languages = models.ManyToManyField("Language")
+    fk_book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True, blank=True)
 
     @property
     def translation_progress(self):
@@ -105,7 +114,7 @@ class Chapter(BaseModel):
 
 class ComponentType(BaseModel):
     name = models.CharField(max_length=45)
-    schema = models.TextField(max_length=100)
+    schema = JSONField()
     base = models.BooleanField(default=False)
     icon = models.CharField(max_length=100)
     label = models.CharField(max_length=45)
@@ -125,7 +134,7 @@ class Component(BaseModel):
         ('F', 'final')
     )
 
-    data = models.TextField(max_length=500)
+    data = JSONField()
     fk_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
     fk_component_type = models.ForeignKey(
         ComponentType, on_delete=models.CASCADE)
