@@ -142,6 +142,8 @@ class ComponentType(BaseModel):
     label = models.CharField(max_length=45)
     fk_parent_type = models.ForeignKey(
         'self', on_delete=models.CASCADE, null=True, blank=True)
+    fk_frontend_widget = models.ForeignKey(
+        'self', on_delete=models.SET_NULL, null=True, blank=True, related_name='frontend_widget')
 
     def __str__(self):
         return self.name
@@ -229,7 +231,7 @@ class Comment(BaseModel):
 
 
 class WordGroup(BaseModel):
-    fk_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+    fk_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, null=True)
     title_ch = models.CharField(max_length=200, blank=True)
     title_de = models.CharField(max_length=200, blank=True)
     words = models.ManyToManyField("Word")
