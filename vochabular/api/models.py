@@ -2,6 +2,7 @@ from collections import defaultdict
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -125,7 +126,7 @@ class Component(BaseModel):
         ('F', 'final')
     )
 
-    data = models.TextField(max_length=500)
+    data = JSONField()
     fk_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
     fk_component_type = models.ForeignKey(
         ComponentType, on_delete=models.CASCADE)
