@@ -106,7 +106,7 @@ class Chapter(BaseModel):
 
 class ComponentType(BaseModel):
     name = models.CharField(max_length=45)
-    schema = models.TextField(max_length=100)
+    schema = JSONField()
     base = models.BooleanField(default=False)
     icon = models.CharField(max_length=100)
     label = models.CharField(max_length=45)
