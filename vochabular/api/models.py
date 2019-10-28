@@ -33,6 +33,27 @@ class Book(BaseModel):
         return "Book number: " + self.number
 
 
+class Character(BaseModel):
+    GENDERS = (('f', 'Female'), ('m', 'Male'))
+    formal_name = models.CharField(max_length=45)
+    informal_name = models.CharField(max_length=45)
+    gender = models.CharField(
+        max_length=1, choices=GENDERS, default=GENDERS[0][0], null=True)
+    title = models.CharField(max_length=45, null=True)
+    speaker = models.CharField(max_length=45, null=True)
+    fk_book = models.ForeignKey(
+        Book, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        unique_together = [
+            ['formal_name', 'fk_book'],
+            ['informal_name', 'fk_book']
+        ]
+
+    def __str__(self):
+        return self.formal_name
+
+
 class Profile(BaseModel):
     LANGUAGE_CHOICES = (
         ('de', 'Deutsch'),
@@ -68,7 +89,8 @@ class Chapter(BaseModel):
     description = models.CharField(max_length=500)
     number = models.IntegerField()
     languages = models.ManyToManyField("Language")
-    fk_book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True, blank=True)
+    fk_book = models.ForeignKey(
+        Book, on_delete=models.SET_NULL, null=True, blank=True)
 
     @property
     def translation_progress(self):
@@ -106,7 +128,7 @@ class Chapter(BaseModel):
         return (total, valid)
 
     class Meta:
-        unique_together = ('titleDE', 'number',)
+        unique_together = ['titleDE', 'number']
 
     def __str__(self):
         return self.titleDE
