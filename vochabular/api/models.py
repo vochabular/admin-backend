@@ -18,12 +18,14 @@ class BaseModel(models.Model):
         abstract = True
 
 
-class Language(BaseModel):
-    code = models.CharField(max_length=20, unique=True)
+class Language(models.Model):
+    id = models.CharField(primary_key=True, max_length=20)
     name = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.code + ": " + self.name
+        return self.id + ": " + self.name
 
 
 class Book(BaseModel):
