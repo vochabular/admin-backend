@@ -218,6 +218,7 @@ class Comment(BaseModel):
         Profile, on_delete=models.SET_NULL, null=True)
     written = models.DateTimeField(default=datetime.now, null=True, blank=True)
     fk_component = models.ForeignKey(Component, on_delete=models.CASCADE)
+    fk_chapter = models.ForeignKey(Chapter, on_delete=models.SET_NULL, null=True)
     fk_parent_comment = models.ForeignKey(
         "Comment", on_delete=models.CASCADE, null=True, blank=True)
 
@@ -232,6 +233,7 @@ class WordGroup(BaseModel):
 
     def __str__(self):
         return 'WordGroup:' + str(self.title_de)
+
 
 class WordGroupTitle(BaseModel):
     wordGroup = models.ForeignKey(WordGroup, on_delete=models.CASCADE)
