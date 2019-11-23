@@ -57,19 +57,13 @@ class Character(BaseModel):
 
 
 class Profile(BaseModel):
-    LANGUAGE_CHOICES = (
-        ('de', 'Deutsch'),
-        ('en', 'English')
-    )
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
     roles = models.CharField(max_length=120)
     current_role = models.CharField(max_length=30)
-    language = models.CharField(
-        max_length=2, choices=LANGUAGE_CHOICES, default=LANGUAGE_CHOICES[0][0])
-    translator_languages = models.CharField(max_length=200)
+    fk_language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True, related_name="profile_language")
+    translator_languages = models.ManyToManyField("Language")
     event_notifications = models.BooleanField(default=True)
     setup_completed = models.BooleanField(default=False)
 
