@@ -2,9 +2,7 @@ from django.db import migrations
 
 
 def get_cascade_delete():
-    f = open("scripts/cascade_delete.sql", "r")
-    content = f.read()
-    return content
+    return open("scripts/cascade_delete.sql", "r").read()
 
 
 class Migration(migrations.Migration):
