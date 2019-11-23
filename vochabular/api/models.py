@@ -76,13 +76,11 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 
 class Chapter(BaseModel):
-    titleCH = models.CharField(max_length=100, unique=True)
-    titleDE = models.CharField(max_length=100, unique=True)
+    languages = models.ManyToManyField(Language, through="ChapterTitle")
     fk_belongs_to = models.ForeignKey(
         'self', on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField(max_length=500)
     number = models.IntegerField()
-    languages = models.ManyToManyField("Language")
     fk_book = models.ForeignKey(
         Book, on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -121,11 +119,14 @@ class Chapter(BaseModel):
 
         return (total, valid)
 
-    class Meta:
-        unique_together = ['titleDE', 'number']
-
     def __str__(self):
-        return self.titleDE
+        return self.description
+
+
+class ChapterTitle(BaseModel):
+    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
 
 
 class ComponentType(BaseModel):
@@ -217,6 +218,7 @@ class Comment(BaseModel):
         Profile, on_delete=models.SET_NULL, null=True)
     written = models.DateTimeField(default=datetime.now, null=True, blank=True)
     fk_component = models.ForeignKey(Component, on_delete=models.CASCADE)
+    fk_chapter = models.ForeignKey(Chapter, on_delete=models.SET_NULL, null=True)
     fk_parent_comment = models.ForeignKey(
         "Comment", on_delete=models.CASCADE, null=True, blank=True)
 
@@ -226,12 +228,17 @@ class Comment(BaseModel):
 
 class WordGroup(BaseModel):
     fk_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, null=True)
-    title_ch = models.CharField(max_length=200, blank=True)
-    title_de = models.CharField(max_length=200, blank=True)
     words = models.ManyToManyField("Word")
+    titles = models.ManyToManyField(Language, through="WordGroupTitle")
 
     def __str__(self):
-        return 'WordGroup:' + str(self.title_de)
+        return 'WordGroup:' + str(self.id)
+
+
+class WordGroupTitle(BaseModel):
+    wordGroup = models.ForeignKey(WordGroup, on_delete=models.CASCADE)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
 
 
 class Word(BaseModel):
