@@ -18,11 +18,9 @@ class BaseModel(models.Model):
         abstract = True
 
 
-class Language(models.Model):
+class Language(BaseModel):
     id = models.CharField(primary_key=True, max_length=20)
     name = models.CharField(max_length=100)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.id + ": " + self.name
@@ -187,7 +185,7 @@ class Translation(BaseModel):
 class Media(BaseModel):
     type = models.CharField(max_length=45)
     url = models.CharField(max_length=255)
-    fk_component = models.ForeignKey(Component, on_delete=models.CASCADE)
+    fk_component = models.ForeignKey(Component, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return 'ID :' + str(self.id) + 'Type: ' + self.type
