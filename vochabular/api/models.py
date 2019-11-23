@@ -232,7 +232,7 @@ class WordGroup(BaseModel):
     titles = models.ManyToManyField(Language, through="WordGroupTitle")
 
     def __str__(self):
-        return 'WordGroup:' + str(self.title_de)
+        return 'WordGroup:' + str(self.id)
 
 
 class WordGroupTitle(BaseModel):
