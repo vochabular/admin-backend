@@ -18,12 +18,14 @@ class BaseModel(models.Model):
         abstract = True
 
 
-class Language(BaseModel):
-    code = models.CharField(max_length=20, unique=True)
+class Language(models.Model):
+    id = models.CharField(primary_key=True, max_length=20)
     name = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.code + ": " + self.name
+        return self.id + ": " + self.name
 
 
 class Book(BaseModel):
@@ -55,19 +57,13 @@ class Character(BaseModel):
 
 
 class Profile(BaseModel):
-    LANGUAGE_CHOICES = (
-        ('de', 'Deutsch'),
-        ('en', 'English')
-    )
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
     roles = models.CharField(max_length=120)
     current_role = models.CharField(max_length=30)
-    language = models.CharField(
-        max_length=2, choices=LANGUAGE_CHOICES, default=LANGUAGE_CHOICES[0][0])
-    translator_languages = models.CharField(max_length=200)
+    fk_language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True, related_name="profile_language")
+    translator_languages = models.ManyToManyField("Language")
     event_notifications = models.BooleanField(default=True)
     setup_completed = models.BooleanField(default=False)
 
