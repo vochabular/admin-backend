@@ -196,8 +196,7 @@ class Media(BaseModel):
 class Text(BaseModel):
     translatable = models.BooleanField()
     fk_component = models.ForeignKey(Component, on_delete=models.CASCADE)
-    master_translation = models.OneToOneField(
-        Translation, on_delete=models.CASCADE, null=True, blank=True)
+    placeholder = models.TextField(null=True)
 
     def __str__(self):
         return 'Text:' + str(self.id)
