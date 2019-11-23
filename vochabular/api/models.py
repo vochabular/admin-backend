@@ -30,7 +30,7 @@ class Book(BaseModel):
     number = models.IntegerField()
 
     def __str__(self):
-        return "Book number: " + self.number
+        return "Book number: " + str(self.number)
 
 
 class Character(BaseModel):
