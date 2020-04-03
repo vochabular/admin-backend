@@ -173,7 +173,7 @@ class Component(BaseModel):
 
 class Translation(BaseModel):
     fk_language = models.ForeignKey(Language, on_delete=models.CASCADE)
-    text_field = models.CharField(max_length=45)
+    text_field = models.TextField(null=True)
     valid = models.BooleanField()
     fk_text = models.ForeignKey('Text', on_delete=models.CASCADE)
 

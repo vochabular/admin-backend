@@ -16,7 +16,7 @@ This is a python django application providing a GraphQL API to the SPA. It uses 
 
 ## Setup application
 
-- Run local postgres: `docker run -d -p 5432:5432 --name postgres -e POSTGRES_PASSWORD=  postgres`
+- Run local postgres: `docker run -d -p 5432:5432 --name postgres -e POSTGRES_HOST_AUTH_METHOD=trust postgres`
 - Run migrations `python vochabular/manage.py migrate`
 - Run server `python vochabular/manage.py runserver`
 - Create admin user `python vochabular/manage.py createsuperuser`
