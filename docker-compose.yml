@@ -4,6 +4,8 @@ services:
   db:
     image: postgres
     container_name: vocha_admin_db
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
   backend:
     container_name: vocha_admin_backend
     build: .
