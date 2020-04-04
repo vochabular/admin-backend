@@ -6,6 +6,7 @@ from api.graphql.profile import ProfileMutation, ProfileQuery
 from api.graphql.comment import CommentMutation, CommentQuery
 from api.graphql.text import TextMutation, TextQuery
 from api.graphql.media import MediaQuery
+from api.graphql.language import LanguageQuery
 
 
 class Query(
@@ -16,7 +17,8 @@ class Query(
     ProfileQuery,
     CommentQuery,
     TextQuery,
-    MediaQuery
+    MediaQuery,
+    LanguageQuery
 ):
     pass
 
