@@ -83,6 +83,7 @@ class Chapter(BaseModel):
     number = models.IntegerField()
     fk_book = models.ForeignKey(
         Book, on_delete=models.SET_NULL, null=True, blank=True)
+    disable_children = models.BooleanField(default=False)
 
     @property
     def translation_progress(self):
