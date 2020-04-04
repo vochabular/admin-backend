@@ -27,7 +27,7 @@ class ProfileInput(graphene.InputObjectType):
     roles = graphene.String()
     current_role = graphene.String()
     language = graphene.String()
-    translator_languages = graphene.String()
+    translator_languages = graphene.List(graphene.String)
     event_notifications = graphene.Boolean()
     setup_completed = graphene.Boolean()
 
@@ -46,8 +46,8 @@ class UpdateProfile(graphene.relay.ClientIDMutation):
         profile.lastname = profile_data.lastname
         profile.roles = profile_data.roles
         profile.current_role = profile_data.current_role
-        profile.language = profile_data.language
-        profile.translator_languages = profile_data.translator_languages
+        profile.fk_language_id = profile_data.language
+        profile.translator_languages.set(profile_data.translator_languages)
         profile.event_notifications = profile_data.event_notifications
         profile.setup_completed = profile_data.setup_completed
         profile.save()
