@@ -68,10 +68,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'vochabular.wsgi.application'
 
 sentry_dsn = os.getenv('SENTRY')
+sentry_env = os.getenv('SENTRY_ENV')
 if sentry_dsn:
     sentry_sdk.init(
         dsn="https://" + sentry_dsn,
-        integrations=[DjangoIntegration()]
+        integrations=[DjangoIntegration()],
+        environment=sentry_env
     )
 
 GRAPHENE = {
