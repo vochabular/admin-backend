@@ -5,6 +5,6 @@ WORKDIR /code
 ADD requirements.txt /code/
 RUN pip install -r requirements.txt
 ADD ./vochabular /code/
-ADD ./scripts /scripts
+ADD ./scripts /code/scripts
 
 CMD python3 manage.py runserver 0.0.0.0:8000

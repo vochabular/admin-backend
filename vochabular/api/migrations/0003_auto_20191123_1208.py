@@ -5,11 +5,11 @@ def setDefaultUUID(table):
     return 'ALTER TABLE "' + table + '" ALTER COLUMN "id" SET DEFAULT gen_random_uuid()'
 
 def getTimestampSQL():
-    f = open("/scripts/timestamp.sql","r") 
+    f = open("scripts/timestamp.sql","r") 
     return f.read()
 
 def getUUIDSQL():
-    f = open("/scripts/uuid.sql","r") 
+    f = open("scripts/uuid.sql","r") 
     return f.read()
 
 class Migration(migrations.Migration):

@@ -15,7 +15,7 @@ services:
     build: .
     volumes:
       - ./vochabular:/code
-      - ./scripts:/scripts
+      - ./scripts:/code/scripts
     ports:
       - "8000:8000"
     depends_on:
@@ -31,7 +31,8 @@ services:
     volumes:
       # To enable "auto-migrations" for meta data and db changes
       - ./hasura/metadata:/hasura-metadata
-      - ./hasura/migrations:/hasura-migrations
+      # Disable db migrations: Since this is Django's job, we want to disable automatic migrations
+      # - ./hasura/migrations:/hasura-migrations
     depends_on:
      - "db"
     restart: always
