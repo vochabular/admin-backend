@@ -9,7 +9,7 @@ ADD ./metadata /hasura-metadata
 ENV HASURA_GRAPHQL_ENABLE_CONSOLE=true
 ENV HASURA_GRAPHQL_DATABASE_URL=$DATABASE_URL
 # ENV HASURA_GRAPHQL_MIGRATIONS_SERVER_PORT=$PORT 
-
+ENV HASURA_GRAPHQL_LOG_LEVEL=debug
 
 # Change $DATABASE_URL to your heroku postgres URL if you're not using
 # the primary postgres instance in your app
