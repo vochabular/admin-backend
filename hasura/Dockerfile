@@ -1,4 +1,4 @@
-FROM hasura/graphql-engine:v1.2.0-beta.3
+FROM hasura/graphql-engine:v1.2.0-beta.3.cli-migrations-v2
 
 # Add the hasura metadata to automatically apply
 ADD ./metadata /hasura-metadata
@@ -14,4 +14,5 @@ CMD graphql-engine \
     --database-url $DATABASE_URL \
     serve \
     --server-port $PORT \
-    --query-plan-cache-size 100
+    --query-plan-cache-size 100 \
+    --retries 10
