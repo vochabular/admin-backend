@@ -1,17 +1,46 @@
 version: '3'
 
+volumes:
+  db_data:
 services:
   db:
     image: postgres
     container_name: vocha_admin_db
     environment:
       POSTGRES_HOST_AUTH_METHOD: "trust"
+    volumes:
+      - db_data:/var/lib/postgresql/data
   backend:
     container_name: vocha_admin_backend
     build: .
     volumes:
       - ./vochabular:/code
+      - ./scripts:/scripts
     ports:
       - "8000:8000"
     depends_on:
       - db
+    environment:
+      DB_HOST: "db"
+  hasura:
+    container_name: vocha_admin_hasura
+    # Note the "special" image .cli-migrations which auto-applies pending migrations on startup
+    image: hasura/graphql-engine:v1.2.0-beta.3.cli-migrations
+    ports:
+      - "8080:8080"
+    volumes:
+      # To enable "auto-migrations" for meta data only
+      - ./hasura/migrations/metadata.yaml:/hasura-migrations/metadata.yaml
+      # To enable "auto-migrations" for metadata AND db changes (Should be disabled, as Django should be used for db changes!)
+      # - ./hasura/migrations:/hasura-migrations
+    depends_on:
+     - "db"
+    restart: always
+    environment:
+      # Used for remote schema stitching
+      DJANGO_URL: http://backend:8000/api
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres@db:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      ## uncomment next line to set an admin secret
+      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
