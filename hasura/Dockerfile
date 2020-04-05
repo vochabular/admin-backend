@@ -1,9 +1,9 @@
 FROM hasura/graphql-engine:v1.2.0-beta.3.cli-migrations-v2
 
 # Add the hasura metadata to automatically apply
-ADD ./hasura/metadata /hasura-metadata
+ADD ./metadata /hasura-metadata
 # Uncomment in case of applying auto db migrations (Hasura)
-# ADD ./hasura/migrations:/hasura-migrations
+# ADD ./migrations /hasura-migrations
 
 # Enable the console
 ENV HASURA_GRAPHQL_ENABLE_CONSOLE=true
