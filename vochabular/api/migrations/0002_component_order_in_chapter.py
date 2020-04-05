@@ -5,7 +5,7 @@ import json
 def getOrderedList(payload):
     if not isinstance(payload, list):
         raise ValueError("No valid array passed as payload!")
-    f = open("scripts/ordered_list.sql", "r")
+    f = open("/scripts/ordered_list.sql", "r")
     content = f.read()
     payload_str = json.dumps(payload)
     return content.replace('__PLACEHOLDER_ORDERED_COLUMN_ARRAY__', payload_str.replace('\"', '\''))
