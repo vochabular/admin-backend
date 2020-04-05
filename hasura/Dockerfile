@@ -1,4 +1,4 @@
-FROM hasura/graphql-engine:v1.2.0-beta.3.cli-migrations
+FROM hasura/graphql-engine:v1.2.0-beta.3
 
 # Add the hasura metadata to automatically apply
 ADD ./metadata /hasura-metadata
