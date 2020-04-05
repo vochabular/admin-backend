@@ -20,7 +20,7 @@ SECRET_KEY = '=7p4(ni8+te(y@d)f9o)x^!30cb7i+)d=_eej1wa@eowin7o#3'
 DEBUG = True
 
 # Make sure to update
-ALLOWED_HOSTS = ["backend"]
+ALLOWED_HOSTS = ["localhost", "backend"]
 
 
 # Application definition
