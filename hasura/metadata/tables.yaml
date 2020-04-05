@@ -1,5 +1,3 @@
-version: 2
-tables:
 - table:
     schema: public
     name: api_book
@@ -1939,9 +1937,3 @@ tables:
       - last_name
       - username
       filter: {}
-remote_schemas:
- - name: Django
-   definition:
-     url_from_env: DJANGO_URL
-     timeout_seconds: 60
-     forward_client_headers: true

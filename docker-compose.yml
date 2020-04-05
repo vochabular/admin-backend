@@ -25,14 +25,13 @@ services:
   hasura:
     container_name: vocha_admin_hasura
     # Note the "special" image .cli-migrations which auto-applies pending migrations on startup
-    image: hasura/graphql-engine:v1.2.0-beta.3.cli-migrations
+    image: hasura/graphql-engine:v1.2.0-beta.3.cli-migrations-v2
     ports:
       - "8080:8080"
     volumes:
-      # To enable "auto-migrations" for meta data only
-      - ./hasura/migrations/metadata.yaml:/hasura-migrations/metadata.yaml
-      # To enable "auto-migrations" for metadata AND db changes (Should be disabled, as Django should be used for db changes!)
-      # - ./hasura/migrations:/hasura-migrations
+      # To enable "auto-migrations" for meta data and db changes
+      - ./hasura/metadata:/hasura-metadata
+      - ./hasura/migrations:/hasura-migrations
     depends_on:
      - "db"
     restart: always

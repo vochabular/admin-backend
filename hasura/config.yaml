@@ -1,1 +1,6 @@
+version: 2 # This allows to use the new v2 migration architecture!
 endpoint: http://localhost:8080
+metadata_directory: metadata
+actions:
+  kind: synchronous
+  handler_webhook_baseurl: http://localhost:3000
