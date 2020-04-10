@@ -39,7 +39,6 @@ The backend consists of two API applications that are connected to Postgres:
 
 - Install docker and docker-compose
 - Build or download and run images `docker-compose up -d`
-- To setup the database (run the applicable migrations) and setup the Django superuser, first connect to the shell of the container: `
 - Make sure to run the Django migrations to setup the DB: `docker exec -it vocha_admin_backend python manage.py migrate`
 - Make sure to create the super user: `docker exec -it vocha_admin_backend python manage.py createsuperuser`
 
