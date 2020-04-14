@@ -1,0 +1,5 @@
+- name: Django
+  definition:
+    url_from_env: DJANGO_URL
+    timeout_seconds: 60
+    forward_client_headers: true

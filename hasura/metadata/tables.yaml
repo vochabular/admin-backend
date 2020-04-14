@@ -1,0 +1,1939 @@
+- table:
+    schema: public
+    name: api_book
+  array_relationships:
+  - name: chapters
+    using:
+      foreign_key_constraint_on:
+        column: fk_book_id
+        table:
+          schema: public
+          name: api_chapter
+  - name: characters
+    using:
+      foreign_key_constraint_on:
+        column: fk_book_id
+        table:
+          schema: public
+          name: api_character
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - number
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - number
+      - created
+      - updated
+      - id
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - number
+      - created
+      - updated
+      - id
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - number
+      - created
+      - updated
+      - id
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - created
+      - id
+      - number
+      - updated
+      filter: {}
+- table:
+    schema: public
+    name: api_chapter
+  object_relationships:
+  - name: book
+    using:
+      foreign_key_constraint_on: fk_book_id
+  - name: parentChapter
+    using:
+      foreign_key_constraint_on: fk_belongs_to_id
+  array_relationships:
+  - name: comments
+    using:
+      foreign_key_constraint_on:
+        column: fk_chapter_id
+        table:
+          schema: public
+          name: api_comment
+  - name: components
+    using:
+      foreign_key_constraint_on:
+        column: fk_chapter_id
+        table:
+          schema: public
+          name: api_component
+  - name: languages
+    using:
+      foreign_key_constraint_on:
+        column: chapter_id
+        table:
+          schema: public
+          name: api_chaptertitle
+  - name: subChapters
+    using:
+      foreign_key_constraint_on:
+        column: fk_belongs_to_id
+        table:
+          schema: public
+          name: api_chapter
+  - name: wordgroups
+    using:
+      foreign_key_constraint_on:
+        column: fk_chapter_id
+        table:
+          schema: public
+          name: api_wordgroup
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - description
+      - disable_children
+      - fk_belongs_to_id
+      - fk_book_id
+      - id
+      - number
+  - role: content-creator
+    permission:
+      check: {}
+      columns:
+      - description
+      - disable_children
+      - fk_belongs_to_id
+      - fk_book_id
+      - id
+      - number
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - created
+      - description
+      - disable_children
+      - fk_belongs_to_id
+      - fk_book_id
+      - id
+      - number
+      - updated
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - disable_children
+      - number
+      - created
+      - updated
+      - fk_belongs_to_id
+      - fk_book_id
+      - id
+      - description
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - description
+      - number
+      - fk_belongs_to_id
+      - fk_book_id
+      - disable_children
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - disable_children
+      - number
+      - created
+      - updated
+      - fk_belongs_to_id
+      - fk_book_id
+      - id
+      - description
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - disable_children
+      - number
+      - created
+      - updated
+      - fk_belongs_to_id
+      - fk_book_id
+      - id
+      - description
+      filter: {}
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - description
+      - disable_children
+      - fk_belongs_to_id
+      - fk_book_id
+      - number
+      filter: {}
+      check: null
+  - role: content-creator
+    permission:
+      columns:
+      - description
+      - disable_children
+      - fk_belongs_to_id
+      - fk_book_id
+      - number
+      filter: {}
+      check: null
+- table:
+    schema: public
+    name: api_chaptertitle
+  object_relationships:
+  - name: language
+    using:
+      foreign_key_constraint_on: language_id
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - chapter_id
+      - id
+      - language_id
+      - title
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - title
+      - chapter_id
+      - language_id
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - title
+      - chapter_id
+      - language_id
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - title
+      - chapter_id
+      - language_id
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - title
+      - chapter_id
+      - language_id
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - title
+      - chapter_id
+      - language_id
+      filter: {}
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - title
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: api_character
+  object_relationships:
+  - name: book
+    using:
+      foreign_key_constraint_on: fk_book_id
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - fk_book_id
+      - formal_name
+      - gender
+      - informal_name
+      - speaker
+      - title
+  - role: content-creator
+    permission:
+      check: {}
+      columns:
+      - fk_book_id
+      - formal_name
+      - gender
+      - id
+      - informal_name
+      - speaker
+      - title
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - formal_name
+      - informal_name
+      - gender
+      - title
+      - speaker
+      - fk_book_id
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - formal_name
+      - informal_name
+      - gender
+      - title
+      - speaker
+      - fk_book_id
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - formal_name
+      - informal_name
+      - gender
+      - title
+      - speaker
+      - fk_book_id
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - formal_name
+      - informal_name
+      - gender
+      - title
+      - speaker
+      - fk_book_id
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - formal_name
+      - informal_name
+      - gender
+      - title
+      - speaker
+      - fk_book_id
+      filter: {}
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - fk_book_id
+      - formal_name
+      - gender
+      - informal_name
+      - speaker
+      - title
+      filter: {}
+      check: null
+  - role: content-creator
+    permission:
+      columns:
+      - formal_name
+      - gender
+      - informal_name
+      - speaker
+      - title
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+  - role: content-creator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: api_comment
+  object_relationships:
+  - name: author
+    using:
+      foreign_key_constraint_on: fk_author_id
+  - name: component
+    using:
+      foreign_key_constraint_on: fk_component_id
+  - name: parentComment
+    using:
+      foreign_key_constraint_on: fk_parent_comment_id
+  array_relationships:
+  - name: answers
+    using:
+      foreign_key_constraint_on:
+        column: fk_parent_comment_id
+        table:
+          schema: public
+          name: api_comment
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - active
+      - context
+      - fk_author_id
+      - fk_chapter_id
+      - fk_component_id
+      - fk_parent_comment_id
+      - text
+      - written
+  - role: approver
+    permission:
+      check: {}
+      columns:
+      - active
+      - context
+      - fk_author_id
+      - fk_chapter_id
+      - fk_component_id
+      - fk_parent_comment_id
+      - text
+      - written
+  - role: content-creator
+    permission:
+      check: {}
+      columns:
+      - active
+      - context
+      - fk_author_id
+      - fk_chapter_id
+      - fk_component_id
+      - fk_parent_comment_id
+      - text
+      - written
+  - role: translator
+    permission:
+      check: {}
+      columns:
+      - active
+      - context
+      - fk_author_id
+      - fk_chapter_id
+      - fk_component_id
+      - fk_parent_comment_id
+      - text
+      - written
+  - role: viewer
+    permission:
+      check: {}
+      columns:
+      - active
+      - context
+      - fk_author_id
+      - fk_chapter_id
+      - fk_component_id
+      - fk_parent_comment_id
+      - text
+      - written
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text
+      - active
+      - context
+      - written
+      - fk_author_id
+      - fk_chapter_id
+      - fk_component_id
+      - fk_parent_comment_id
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text
+      - active
+      - context
+      - written
+      - fk_author_id
+      - fk_chapter_id
+      - fk_component_id
+      - fk_parent_comment_id
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text
+      - active
+      - context
+      - written
+      - fk_author_id
+      - fk_chapter_id
+      - fk_component_id
+      - fk_parent_comment_id
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text
+      - active
+      - context
+      - written
+      - fk_author_id
+      - fk_chapter_id
+      - fk_component_id
+      - fk_parent_comment_id
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text
+      - active
+      - context
+      - written
+      - fk_author_id
+      - fk_chapter_id
+      - fk_component_id
+      - fk_parent_comment_id
+      filter: {}
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - active
+      - context
+      - fk_component_id
+      - fk_parent_comment_id
+      - text
+      filter: {}
+      check: null
+  - role: approver
+    permission:
+      columns:
+      - active
+      - context
+      - fk_component_id
+      - fk_parent_comment_id
+      - text
+      filter: {}
+      check: null
+  - role: content-creator
+    permission:
+      columns:
+      - active
+      - context
+      - fk_component_id
+      - fk_parent_comment_id
+      - text
+      filter: {}
+      check: null
+  - role: translator
+    permission:
+      columns:
+      - active
+      - context
+      - fk_component_id
+      - fk_parent_comment_id
+      - text
+      filter: {}
+      check: null
+  - role: viewer
+    permission:
+      columns:
+      - active
+      - context
+      - fk_component_id
+      - fk_parent_comment_id
+      - text
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: api_component
+  object_relationships:
+  - name: chapter
+    using:
+      foreign_key_constraint_on: fk_chapter_id
+  - name: lockedBy
+    using:
+      foreign_key_constraint_on: fk_locked_by_id
+  - name: parent
+    using:
+      foreign_key_constraint_on: fk_component_id
+  - name: type
+    using:
+      foreign_key_constraint_on: fk_component_type_id
+  array_relationships:
+  - name: children
+    using:
+      foreign_key_constraint_on:
+        column: fk_component_id
+        table:
+          schema: public
+          name: api_component
+  - name: comments
+    using:
+      foreign_key_constraint_on:
+        column: fk_component_id
+        table:
+          schema: public
+          name: api_comment
+  - name: media
+    using:
+      foreign_key_constraint_on:
+        column: fk_component_id
+        table:
+          schema: public
+          name: api_media
+  - name: texts
+    using:
+      foreign_key_constraint_on:
+        column: fk_component_id
+        table:
+          schema: public
+          name: api_text
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - data
+      - fk_chapter_id
+      - fk_component_id
+      - fk_component_type_id
+      - fk_locked_by_id
+      - locked_ts
+      - order_in_chapter
+      - state
+  - role: content-creator
+    permission:
+      check: {}
+      columns:
+      - data
+      - fk_chapter_id
+      - fk_component_id
+      - fk_component_type_id
+      - fk_locked_by_id
+      - locked_ts
+      - order_in_chapter
+      - state
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - data
+      - state
+      - locked_ts
+      - fk_chapter_id
+      - fk_component_id
+      - fk_component_type_id
+      - fk_locked_by_id
+      - order_in_chapter
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - data
+      - state
+      - locked_ts
+      - fk_chapter_id
+      - fk_component_id
+      - fk_component_type_id
+      - fk_locked_by_id
+      - order_in_chapter
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - data
+      - state
+      - locked_ts
+      - fk_chapter_id
+      - fk_component_id
+      - fk_component_type_id
+      - fk_locked_by_id
+      - order_in_chapter
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - data
+      - state
+      - locked_ts
+      - fk_chapter_id
+      - fk_component_id
+      - fk_component_type_id
+      - fk_locked_by_id
+      - order_in_chapter
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - data
+      - state
+      - locked_ts
+      - fk_chapter_id
+      - fk_component_id
+      - fk_component_type_id
+      - fk_locked_by_id
+      - order_in_chapter
+      filter: {}
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - data
+      - fk_locked_by_id
+      - locked_ts
+      - order_in_chapter
+      - state
+      filter: {}
+      check: null
+  - role: approver
+    permission:
+      columns:
+      - data
+      - fk_locked_by_id
+      - locked_ts
+      - order_in_chapter
+      - state
+      filter: {}
+      check: null
+  - role: content-creator
+    permission:
+      columns:
+      - data
+      - fk_locked_by_id
+      - locked_ts
+      - order_in_chapter
+      - state
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+  - role: content-creator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: api_componenttype
+  object_relationships:
+  - name: frontendWidget
+    using:
+      foreign_key_constraint_on: fk_frontend_widget_id
+  array_relationships:
+  - name: children
+    using:
+      foreign_key_constraint_on:
+        column: fk_parent_type_id
+        table:
+          schema: public
+          name: api_componenttype
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - name
+      - schema
+      - base
+      - icon
+      - label
+      - fk_frontend_widget_id
+      - fk_parent_type_id
+      filter: {}
+      allow_aggregations: true
+  - role: approver
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - name
+      - schema
+      - base
+      - icon
+      - label
+      - fk_frontend_widget_id
+      - fk_parent_type_id
+      filter: {}
+      allow_aggregations: true
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - name
+      - schema
+      - base
+      - icon
+      - label
+      - fk_frontend_widget_id
+      - fk_parent_type_id
+      filter: {}
+      allow_aggregations: true
+  - role: translator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - name
+      - schema
+      - base
+      - icon
+      - label
+      - fk_frontend_widget_id
+      - fk_parent_type_id
+      filter: {}
+      allow_aggregations: true
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - name
+      - schema
+      - base
+      - icon
+      - label
+      - fk_frontend_widget_id
+      - fk_parent_type_id
+      filter: {}
+      allow_aggregations: true
+- table:
+    schema: public
+    name: api_language
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - created
+      - id
+      - name
+      - updated
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - created
+      - id
+      - name
+      - updated
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - created
+      - id
+      - name
+      - updated
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - created
+      - id
+      - name
+      - updated
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - created
+      - id
+      - name
+      - updated
+      filter: {}
+- table:
+    schema: public
+    name: api_media
+  object_relationships:
+  - name: component
+    using:
+      foreign_key_constraint_on: fk_component_id
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - fk_component_id
+      - id
+      - type
+      - url
+  - role: content-creator
+    permission:
+      check: {}
+      columns:
+      - fk_component_id
+      - id
+      - type
+      - url
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - type
+      - url
+      - fk_component_id
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - type
+      - url
+      - fk_component_id
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - type
+      - url
+      - fk_component_id
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - type
+      - url
+      - fk_component_id
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - type
+      - url
+      - fk_component_id
+      filter: {}
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - fk_component_id
+      - id
+      - type
+      - url
+      filter: {}
+      check: null
+  - role: content-creator
+    permission:
+      columns:
+      - fk_component_id
+      - id
+      - type
+      - url
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: api_profile
+  object_relationships:
+  - name: language
+    using:
+      foreign_key_constraint_on: fk_language_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+  array_relationships:
+  - name: comments
+    using:
+      foreign_key_constraint_on:
+        column: fk_author_id
+        table:
+          schema: public
+          name: api_comment
+  - name: translatorLanguages
+    using:
+      foreign_key_constraint_on:
+        column: profile_id
+        table:
+          schema: public
+          name: api_profile_translator_languages
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - current_role
+      - event_notifications
+      - firstname
+      - fk_language_id
+      - lastname
+      - roles
+      - setup_completed
+      - user_id
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - firstname
+      - lastname
+      - roles
+      - current_role
+      - event_notifications
+      - setup_completed
+      - fk_language_id
+      - user_id
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - firstname
+      - lastname
+      - roles
+      - current_role
+      - event_notifications
+      - setup_completed
+      - fk_language_id
+      - user_id
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - firstname
+      - lastname
+      - roles
+      - current_role
+      - event_notifications
+      - setup_completed
+      - fk_language_id
+      - user_id
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - firstname
+      - lastname
+      - roles
+      - current_role
+      - event_notifications
+      - setup_completed
+      - fk_language_id
+      - user_id
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - firstname
+      - lastname
+      - roles
+      - current_role
+      - event_notifications
+      - setup_completed
+      - fk_language_id
+      - user_id
+      filter: {}
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - current_role
+      - event_notifications
+      - firstname
+      - fk_language_id
+      - lastname
+      - roles
+      - setup_completed
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: api_profile_translator_languages
+  object_relationships:
+  - name: language
+    using:
+      foreign_key_constraint_on: language_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - language_id
+      - profile_id
+  - role: approver
+    permission:
+      check: {}
+      columns:
+      - language_id
+      - profile_id
+  - role: content-creator
+    permission:
+      check: {}
+      columns:
+      - language_id
+      - profile_id
+  - role: translator
+    permission:
+      check: {}
+      columns:
+      - language_id
+      - profile_id
+  - role: viewer
+    permission:
+      check: {}
+      columns:
+      - language_id
+      - profile_id
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - language_id
+      - profile_id
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - id
+      - language_id
+      - profile_id
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - language_id
+      - profile_id
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - id
+      - language_id
+      - profile_id
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - language_id
+      - profile_id
+      filter: {}
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+  - role: approver
+    permission:
+      filter: {}
+  - role: content-creator
+    permission:
+      filter: {}
+  - role: translator
+    permission:
+      filter: {}
+  - role: viewer
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: api_text
+  array_relationships:
+  - name: translations
+    using:
+      foreign_key_constraint_on:
+        column: fk_text_id
+        table:
+          schema: public
+          name: api_translation
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - fk_component_id
+      - id
+      - placeholder
+      - translatable
+  - role: content-creator
+    permission:
+      check: {}
+      columns:
+      - fk_component_id
+      - id
+      - placeholder
+      - translatable
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - translatable
+      - fk_component_id
+      - placeholder
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - translatable
+      - fk_component_id
+      - placeholder
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - translatable
+      - fk_component_id
+      - placeholder
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - translatable
+      - fk_component_id
+      - placeholder
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - translatable
+      - fk_component_id
+      - placeholder
+      filter: {}
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - fk_component_id
+      - placeholder
+      - translatable
+      filter: {}
+      check: null
+  - role: content-creator
+    permission:
+      columns:
+      - fk_component_id
+      - placeholder
+      - translatable
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: api_translation
+  object_relationships:
+  - name: language
+    using:
+      foreign_key_constraint_on: fk_language_id
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - fk_language_id
+      - fk_text_id
+      - id
+      - text_field
+      - valid
+  - role: content-creator
+    permission:
+      check: {}
+      columns:
+      - fk_language_id
+      - fk_text_id
+      - id
+      - text_field
+      - valid
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text_field
+      - valid
+      - fk_language_id
+      - fk_text_id
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text_field
+      - valid
+      - fk_language_id
+      - fk_text_id
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text_field
+      - valid
+      - fk_language_id
+      - fk_text_id
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text_field
+      - valid
+      - fk_language_id
+      - fk_text_id
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text_field
+      - valid
+      - fk_language_id
+      - fk_text_id
+      filter: {}
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - fk_language_id
+      - fk_text_id
+      - text_field
+      - valid
+      filter: {}
+      check: null
+  - role: content-creator
+    permission:
+      columns:
+      - fk_language_id
+      - fk_text_id
+      - text_field
+      - valid
+      filter: {}
+      check: null
+  - role: translator
+    permission:
+      columns:
+      - fk_language_id
+      - fk_text_id
+      - text_field
+      - valid
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: api_word
+  array_relationships:
+  - name: translations
+    using:
+      foreign_key_constraint_on:
+        column: word_id
+        table:
+          schema: public
+          name: api_wordtranslation
+  - name: wordgroup_words
+    using:
+      foreign_key_constraint_on:
+        column: word_id
+        table:
+          schema: public
+          name: api_wordgroup_words
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - id
+  - role: content-creator
+    permission:
+      check: {}
+      columns:
+      - id
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      filter: {}
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+  - role: content-creator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: api_wordgroup
+  object_relationships:
+  - name: chapter
+    using:
+      foreign_key_constraint_on: fk_chapter_id
+  array_relationships:
+  - name: titles
+    using:
+      foreign_key_constraint_on:
+        column: wordGroup_id
+        table:
+          schema: public
+          name: api_wordgrouptitle
+  - name: words
+    using:
+      foreign_key_constraint_on:
+        column: wordgroup_id
+        table:
+          schema: public
+          name: api_wordgroup_words
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - fk_chapter_id
+      - id
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - fk_chapter_id
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - fk_chapter_id
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - fk_chapter_id
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - fk_chapter_id
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - fk_chapter_id
+      filter: {}
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - fk_chapter_id
+      filter: {}
+      check: null
+  - role: content-creator
+    permission:
+      columns:
+      - fk_chapter_id
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: api_wordgroup_words
+  object_relationships:
+  - name: word
+    using:
+      foreign_key_constraint_on: word_id
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - id
+      - word_id
+      - wordgroup_id
+  - role: content-creator
+    permission:
+      check: {}
+      columns:
+      - id
+      - word_id
+      - wordgroup_id
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - wordgroup_id
+      - word_id
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - id
+      - wordgroup_id
+      - word_id
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - wordgroup_id
+      - word_id
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - id
+      - wordgroup_id
+      - word_id
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - wordgroup_id
+      - word_id
+      filter: {}
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+  - role: content-creator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: api_wordgrouptitle
+  object_relationships:
+  - name: language
+    using:
+      foreign_key_constraint_on: language_id
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - language_id
+      - title
+      - wordGroup_id
+  - role: content-creator
+    permission:
+      check: {}
+      columns:
+      - language_id
+      - title
+      - wordGroup_id
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - title
+      - language_id
+      - wordGroup_id
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - title
+      - language_id
+      - wordGroup_id
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - title
+      - language_id
+      - wordGroup_id
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - title
+      - language_id
+      - wordGroup_id
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - title
+      - language_id
+      - wordGroup_id
+      filter: {}
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - language_id
+      - title
+      - wordGroup_id
+      filter: {}
+      check: null
+  - role: content-creator
+    permission:
+      columns:
+      - language_id
+      - title
+      - wordGroup_id
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+  - role: content-creator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: api_wordtranslation
+  object_relationships:
+  - name: language
+    using:
+      foreign_key_constraint_on: fk_language_id
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - audio
+      - example_sentence
+      - fk_language_id
+      - text
+      - word_id
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text
+      - audio
+      - example_sentence
+      - fk_language_id
+      - word_id
+      filter: {}
+  - role: approver
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text
+      - audio
+      - example_sentence
+      - fk_language_id
+      - word_id
+      filter: {}
+  - role: content-creator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text
+      - audio
+      - example_sentence
+      - fk_language_id
+      - word_id
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text
+      - audio
+      - example_sentence
+      - fk_language_id
+      - word_id
+      filter: {}
+  - role: viewer
+    permission:
+      columns:
+      - id
+      - created
+      - updated
+      - text
+      - audio
+      - example_sentence
+      - fk_language_id
+      - word_id
+      filter: {}
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - audio
+      - example_sentence
+      - fk_language_id
+      - text
+      - word_id
+      filter: {}
+      check: null
+  - role: content-creator
+    permission:
+      columns:
+      - audio
+      - example_sentence
+      - fk_language_id
+      - text
+      - word_id
+      filter: {}
+      check: null
+  - role: translator
+    permission:
+      columns:
+      - audio
+      - example_sentence
+      - fk_language_id
+      - text
+      - word_id
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: auth_user
+  object_relationships:
+  - name: profile
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: api_profile
+        column_mapping:
+          id: user_id
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - date_joined
+      - email
+      - first_name
+      - id
+      - is_active
+      - is_staff
+      - is_superuser
+      - last_login
+      - last_name
+      - username
+      filter: {}
