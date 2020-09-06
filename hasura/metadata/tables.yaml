@@ -1076,6 +1076,66 @@
       - roles
       - setup_completed
       - user_id
+  - role: approver
+    permission:
+      check:
+        user:
+          email:
+            _eq: X-Hasura-Email
+      columns:
+      - current_role
+      - event_notifications
+      - firstname
+      - fk_language_id
+      - lastname
+      - roles
+      - setup_completed
+      backend_only: false
+  - role: content-creator
+    permission:
+      check:
+        user:
+          email:
+            _eq: X-Hasura-Email
+      columns:
+      - current_role
+      - event_notifications
+      - firstname
+      - fk_language_id
+      - lastname
+      - roles
+      - setup_completed
+      backend_only: false
+  - role: translator
+    permission:
+      check:
+        user:
+          email:
+            _eq: X-Hasura-Email
+      columns:
+      - current_role
+      - event_notifications
+      - firstname
+      - fk_language_id
+      - lastname
+      - roles
+      - setup_completed
+      backend_only: false
+  - role: viewer
+    permission:
+      check:
+        user:
+          email:
+            _eq: X-Hasura-Email
+      columns:
+      - current_role
+      - event_notifications
+      - firstname
+      - fk_language_id
+      - lastname
+      - roles
+      - setup_completed
+      backend_only: false
   select_permissions:
   - role: administrator
     permission:
@@ -1095,63 +1155,75 @@
   - role: approver
     permission:
       columns:
-      - id
       - created
-      - updated
-      - firstname
-      - lastname
-      - roles
       - current_role
       - event_notifications
-      - setup_completed
+      - firstname
       - fk_language_id
+      - id
+      - lastname
+      - roles
+      - setup_completed
+      - updated
       - user_id
-      filter: {}
+      filter:
+        user:
+          email:
+            _eq: X-Hasura-Email
   - role: content-creator
     permission:
       columns:
-      - id
       - created
-      - updated
-      - firstname
-      - lastname
-      - roles
       - current_role
       - event_notifications
-      - setup_completed
+      - firstname
       - fk_language_id
+      - id
+      - lastname
+      - roles
+      - setup_completed
+      - updated
       - user_id
-      filter: {}
+      filter:
+        user:
+          email:
+            _eq: X-Hasura-Email
   - role: translator
     permission:
       columns:
-      - id
       - created
-      - updated
-      - firstname
-      - lastname
-      - roles
       - current_role
       - event_notifications
-      - setup_completed
+      - firstname
       - fk_language_id
+      - id
+      - lastname
+      - roles
+      - setup_completed
+      - updated
       - user_id
-      filter: {}
+      filter:
+        user:
+          email:
+            _eq: X-Hasura-Email
   - role: viewer
     permission:
       columns:
-      - id
       - created
-      - updated
-      - firstname
-      - lastname
-      - roles
       - current_role
       - event_notifications
-      - setup_completed
+      - firstname
       - fk_language_id
+      - id
+      - lastname
+      - roles
+      - setup_completed
+      - updated
       - user_id
-      filter: {}
+      filter:
+        user:
+          email:
+            _eq: X-Hasura-Email
   update_permissions:
   - role: administrator
     permission:
