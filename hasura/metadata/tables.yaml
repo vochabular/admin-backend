@@ -1169,10 +1169,7 @@
       - setup_completed
       - updated
       - user_id
-      filter:
-        user:
-          email:
-            _eq: X-Hasura-Email
+      filter: {}
   - role: content-creator
     permission:
       columns:
@@ -1187,10 +1184,7 @@
       - setup_completed
       - updated
       - user_id
-      filter:
-        user:
-          email:
-            _eq: X-Hasura-Email
+      filter: {}
   - role: translator
     permission:
       columns:
@@ -1205,10 +1199,7 @@
       - setup_completed
       - updated
       - user_id
-      filter:
-        user:
-          email:
-            _eq: X-Hasura-Email
+      filter: {}
   - role: viewer
     permission:
       columns:
@@ -1223,10 +1214,7 @@
       - setup_completed
       - updated
       - user_id
-      filter:
-        user:
-          email:
-            _eq: X-Hasura-Email
+      filter: {}
   update_permissions:
   - role: administrator
     permission:
