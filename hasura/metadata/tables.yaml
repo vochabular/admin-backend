@@ -1165,6 +1165,78 @@
       - setup_completed
       filter: {}
       check: null
+  - role: approver
+    permission:
+      columns:
+      - current_role
+      - event_notifications
+      - firstname
+      - fk_language_id
+      - lastname
+      - roles
+      - setup_completed
+      filter:
+        user:
+          email:
+            _eq: X-Hasura-Email
+      check:
+        user:
+          email:
+            _eq: X-Hasura-Email
+  - role: content-creator
+    permission:
+      columns:
+      - current_role
+      - event_notifications
+      - firstname
+      - fk_language_id
+      - lastname
+      - roles
+      - setup_completed
+      filter:
+        user:
+          email:
+            _eq: X-Hasura-Email
+      check:
+        user:
+          email:
+            _eq: X-Hasura-Email
+  - role: translator
+    permission:
+      columns:
+      - current_role
+      - event_notifications
+      - firstname
+      - fk_language_id
+      - lastname
+      - roles
+      - setup_completed
+      filter:
+        user:
+          email:
+            _eq: X-Hasura-Email
+      check:
+        user:
+          email:
+            _eq: X-Hasura-Email
+  - role: viewer
+    permission:
+      columns:
+      - current_role
+      - event_notifications
+      - firstname
+      - fk_language_id
+      - lastname
+      - roles
+      - setup_completed
+      filter:
+        user:
+          email:
+            _eq: X-Hasura-Email
+      check:
+        user:
+          email:
+            _eq: X-Hasura-Email
   delete_permissions:
   - role: administrator
     permission:
@@ -1937,3 +2009,124 @@
       - last_name
       - username
       filter: {}
+  - role: approver
+    permission:
+      columns:
+      - date_joined
+      - email
+      - first_name
+      - id
+      - is_active
+      - is_staff
+      - is_superuser
+      - last_login
+      - last_name
+      - username
+      filter:
+        email:
+          _eq: X-Hasura-Email
+      limit: 1
+  - role: content-creator
+    permission:
+      columns:
+      - date_joined
+      - email
+      - first_name
+      - id
+      - is_active
+      - is_staff
+      - is_superuser
+      - last_login
+      - last_name
+      - username
+      filter:
+        email:
+          _eq: X-Hasura-Email
+      limit: 1
+  - role: translator
+    permission:
+      columns:
+      - date_joined
+      - email
+      - first_name
+      - id
+      - is_active
+      - is_staff
+      - is_superuser
+      - last_login
+      - last_name
+      - username
+      filter:
+        email:
+          _eq: X-Hasura-Email
+      limit: 1
+  - role: viewer
+    permission:
+      columns:
+      - date_joined
+      - email
+      - first_name
+      - id
+      - is_active
+      - is_staff
+      - is_superuser
+      - last_login
+      - last_name
+      - username
+      filter:
+        email:
+          _eq: X-Hasura-Email
+      limit: 1
+  update_permissions:
+  - role: approver
+    permission:
+      columns:
+      - email
+      - first_name
+      - last_name
+      - username
+      filter:
+        email:
+          _eq: X-Hasura-Email
+      check:
+        email:
+          _eq: X-Hasura-Email
+  - role: content-creator
+    permission:
+      columns:
+      - email
+      - first_name
+      - last_name
+      - username
+      filter:
+        email:
+          _eq: X-Hasura-Email
+      check:
+        email:
+          _eq: X-Hasura-Email
+  - role: translator
+    permission:
+      columns:
+      - email
+      - first_name
+      - last_name
+      - username
+      filter:
+        email:
+          _eq: X-Hasura-Email
+      check:
+        email:
+          _eq: X-Hasura-Email
+  - role: viewer
+    permission:
+      columns:
+      - email
+      - first_name
+      - last_name
+      - username
+      filter:
+        email:
+          _eq: X-Hasura-Email
+      check:
+        email:
+          _eq: X-Hasura-Email
