@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 volumes:
   db_data:
@@ -25,7 +25,7 @@ services:
   hasura:
     container_name: vocha_admin_hasura
     # Note the "special" image .cli-migrations which auto-applies pending migrations on startup
-    image: hasura/graphql-engine:v1.2.0-beta.3.cli-migrations-v2
+    image: hasura/graphql-engine:v1.3.1.cli-migrations-v2
     ports:
       - "8080:8080"
     volumes:
@@ -34,7 +34,7 @@ services:
       # Disable db migrations: Since this is Django's job, we want to disable automatic migrations
       # - ./hasura/migrations:/hasura-migrations
     depends_on:
-     - "db"
+      - "db"
     restart: always
     environment:
       # Used for remote schema stitching
