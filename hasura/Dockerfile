@@ -1,5 +1,3 @@
-# TODO(df): Using this image then crashes on Heroku...
-# FROM hasura/graphql-engine:v1.2.0-beta.3.cli-migrations-v2
 FROM hasura/graphql-engine:v1.3.2.cli-migrations-v2
 
 # Add the hasura metadata to automatically apply
@@ -9,9 +7,10 @@ ADD ./metadata /hasura-metadata
 
 # Enable the console
 ENV HASURA_GRAPHQL_ENABLE_CONSOLE=true
-ENV HASURA_GRAPHQL_CLI_ENVIRONMENT=default
+
+# These two seem to be necessary for making migrations work
+# ENV HASURA_GRAPHQL_CLI_ENVIRONMENT=default
 ENV HASURA_GRAPHQL_MIGRATIONS_DATABASE_ENV_VAR=DATABASE_URL
-# ENV HASURA_GRAPHQL_MIGRATIONS_SERVER_PORT=$PORT 
 # ENV HASURA_GRAPHQL_LOG_LEVEL=debug
 
 # Change $DATABASE_URL to your heroku postgres URL if you're not using
