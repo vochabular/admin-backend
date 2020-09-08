@@ -4,7 +4,8 @@ setup:
       as: DATABASE
   config:
     HASURA_GRAPHQL_MIGRATIONS_DATABASE_ENV_VAR: DATABASE_URL
-    # HASURA_GRAPHQL_MIGRATIONS_DIR: /hasura/migrations
+    HASURA_GRAPHQL_MIGRATIONS_DIR: /hasura/migrations
+    HASURA_GRAPHQL_METADATA_DIR: /hasura/metadata
 build:
   docker:
     web: hasura/Dockerfile
