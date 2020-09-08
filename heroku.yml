@@ -1,3 +1,10 @@
+setup:
+  addons:
+    - plan: heroku-postgresql
+      as: DATABASE
+  config:
+    HASURA_GRAPHQL_MIGRATIONS_DATABASE_ENV_VAR: DATABASE_URL
+    # HASURA_GRAPHQL_MIGRATIONS_DIR: /hasura/migrations
 build:
-    docker:
-      web: hasura/Dockerfile
+  docker:
+    web: hasura/Dockerfile
