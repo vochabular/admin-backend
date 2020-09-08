@@ -1,6 +1,6 @@
 # TODO(df): Using this image then crashes on Heroku...
 # FROM hasura/graphql-engine:v1.2.0-beta.3.cli-migrations-v2
-FROM hasura/graphql-engine:v1.2.0-beta.3
+FROM hasura/graphql-engine:v1.3.2.cli-migrations-v2
 
 # Add the hasura metadata to automatically apply
 ADD ./metadata /hasura-metadata

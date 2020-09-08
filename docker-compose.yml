@@ -1,3 +1,9 @@
+########
+
+# Note: This docker file is only relevant for local development.
+# For staging/production, the Dockerfile still needs to get edited!
+
+#######
 version: "3"
 
 volumes:
