@@ -1038,6 +1038,9 @@
   - role: administrator
     permission:
       filter: {}
+  - role: content-creator
+    permission:
+      filter: {}
 - table:
     schema: public
     name: api_profile
@@ -1076,6 +1079,66 @@
       - roles
       - setup_completed
       - user_id
+  - role: approver
+    permission:
+      check:
+        user:
+          email:
+            _eq: X-Hasura-Email
+      columns:
+      - current_role
+      - event_notifications
+      - firstname
+      - fk_language_id
+      - lastname
+      - roles
+      - setup_completed
+      backend_only: false
+  - role: content-creator
+    permission:
+      check:
+        user:
+          email:
+            _eq: X-Hasura-Email
+      columns:
+      - current_role
+      - event_notifications
+      - firstname
+      - fk_language_id
+      - lastname
+      - roles
+      - setup_completed
+      backend_only: false
+  - role: translator
+    permission:
+      check:
+        user:
+          email:
+            _eq: X-Hasura-Email
+      columns:
+      - current_role
+      - event_notifications
+      - firstname
+      - fk_language_id
+      - lastname
+      - roles
+      - setup_completed
+      backend_only: false
+  - role: viewer
+    permission:
+      check:
+        user:
+          email:
+            _eq: X-Hasura-Email
+      columns:
+      - current_role
+      - event_notifications
+      - firstname
+      - fk_language_id
+      - lastname
+      - roles
+      - setup_completed
+      backend_only: false
   select_permissions:
   - role: administrator
     permission:
@@ -1095,61 +1158,61 @@
   - role: approver
     permission:
       columns:
-      - id
       - created
-      - updated
-      - firstname
-      - lastname
-      - roles
       - current_role
       - event_notifications
-      - setup_completed
+      - firstname
       - fk_language_id
+      - id
+      - lastname
+      - roles
+      - setup_completed
+      - updated
       - user_id
       filter: {}
   - role: content-creator
     permission:
       columns:
-      - id
       - created
-      - updated
-      - firstname
-      - lastname
-      - roles
       - current_role
       - event_notifications
-      - setup_completed
+      - firstname
       - fk_language_id
+      - id
+      - lastname
+      - roles
+      - setup_completed
+      - updated
       - user_id
       filter: {}
   - role: translator
     permission:
       columns:
-      - id
       - created
-      - updated
-      - firstname
-      - lastname
-      - roles
       - current_role
       - event_notifications
-      - setup_completed
+      - firstname
       - fk_language_id
+      - id
+      - lastname
+      - roles
+      - setup_completed
+      - updated
       - user_id
       filter: {}
   - role: viewer
     permission:
       columns:
-      - id
       - created
-      - updated
-      - firstname
-      - lastname
-      - roles
       - current_role
       - event_notifications
-      - setup_completed
+      - firstname
       - fk_language_id
+      - id
+      - lastname
+      - roles
+      - setup_completed
+      - updated
       - user_id
       filter: {}
   update_permissions:
@@ -1434,6 +1497,9 @@
   - role: administrator
     permission:
       filter: {}
+  - role: content-creator
+    permission:
+      filter: {}
 - table:
     schema: public
     name: api_translation
@@ -1546,6 +1612,9 @@
       check: null
   delete_permissions:
   - role: administrator
+    permission:
+      filter: {}
+  - role: content-creator
     permission:
       filter: {}
 - table:
@@ -2025,7 +2094,6 @@
       filter:
         email:
           _eq: X-Hasura-Email
-      limit: 1
   - role: content-creator
     permission:
       columns:
@@ -2042,7 +2110,6 @@
       filter:
         email:
           _eq: X-Hasura-Email
-      limit: 1
   - role: translator
     permission:
       columns:
@@ -2059,7 +2126,6 @@
       filter:
         email:
           _eq: X-Hasura-Email
-      limit: 1
   - role: viewer
     permission:
       columns:
@@ -2074,59 +2140,5 @@
       - last_name
       - username
       filter:
-        email:
-          _eq: X-Hasura-Email
-      limit: 1
-  update_permissions:
-  - role: approver
-    permission:
-      columns:
-      - email
-      - first_name
-      - last_name
-      - username
-      filter:
-        email:
-          _eq: X-Hasura-Email
-      check:
-        email:
-          _eq: X-Hasura-Email
-  - role: content-creator
-    permission:
-      columns:
-      - email
-      - first_name
-      - last_name
-      - username
-      filter:
-        email:
-          _eq: X-Hasura-Email
-      check:
-        email:
-          _eq: X-Hasura-Email
-  - role: translator
-    permission:
-      columns:
-      - email
-      - first_name
-      - last_name
-      - username
-      filter:
-        email:
-          _eq: X-Hasura-Email
-      check:
-        email:
-          _eq: X-Hasura-Email
-  - role: viewer
-    permission:
-      columns:
-      - email
-      - first_name
-      - last_name
-      - username
-      filter:
-        email:
-          _eq: X-Hasura-Email
-      check:
         email:
           _eq: X-Hasura-Email
