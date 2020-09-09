@@ -621,6 +621,34 @@
   - role: administrator
     permission:
       filter: {}
+  - role: approver
+    permission:
+      filter:
+        author:
+          user:
+            email:
+              _eq: X-Hasura-Email
+  - role: content-creator
+    permission:
+      filter:
+        author:
+          user:
+            email:
+              _eq: X-Hasura-Email
+  - role: translator
+    permission:
+      filter:
+        author:
+          user:
+            email:
+              _eq: X-Hasura-Email
+  - role: viewer
+    permission:
+      filter:
+        author:
+          user:
+            email:
+              _eq: X-Hasura-Email
 - table:
     schema: public
     name: api_component
