@@ -42,6 +42,26 @@ The backend consists of two API applications that are connected to Postgres:
 - Make sure to run the Django migrations to setup the DB: `docker exec -it vocha_admin_backend python manage.py migrate`
 - Make sure to create the super user: `docker exec -it vocha_admin_backend python manage.py createsuperuser`
 
+## Sync staging database with local psql database
+With `heroku pg:pull`and `heroku pg:push` you either pull the postgresql database from heroku to your local machine or push your local database to heroku:
+
+`heroku pg:pull DATABASE vochabular --app vochabular-admin`
+
+This command creates a new local database named `vochabular` and then pulls data from the database at `DATABASE` from the app `vochabular-admin`. To prevent accidental data overwrites and loss, the local database must not already exist. You will be prompted to drop an already existing local database before proceeding.
+
+If providing a Postgres user or password for your local DB is necessary, use the appropriate environment variables like so:
+
+`PGUSER=postgres PGPASSWORD=password heroku pg:pull DATABASE vochabular --app vochabular-admin`
+
+
+`pg:push` pushes data from a local database into a remote Heroku Postgres database. The command looks like this:
+
+`heroku pg:push mylocaldb DATABASE --app vochabular-admin`
+
+This command takes the local database `mylocaldb` and pushes it to the database at `DATABASE` on the app `vochabular-admin`. To prevent accidental data overwrites and loss, the remote database must be empty. You will be prompted to `pg:reset` a remote database that is not empty.
+
+Usage of the PGUSER and PGPASSWORD for your local database is also supported for `pg:push`, just like for the `pg:pull` command.
+
 ## Sample GraphQL Queries
 
 ```
