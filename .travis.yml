@@ -11,6 +11,9 @@ services:
 
 jobs:
   include:
+    - stage: deps
+      script:
+        - pip install pip-tools && pip-compile -q & git diff --exit-code
     - stage: test
       script:
         - python vochabular/manage.py migrate

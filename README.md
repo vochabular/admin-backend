@@ -24,9 +24,15 @@ The backend consists of two API applications that are connected to Postgres:
 
 - Install python3 and virtualenv
 - Create a virtualenv in the checkout: `virtualenv -p python3 .venv`
-- Activate the virtualenv `source .venv/bin/activate`
+- Activate the virtualenv `source .venv/bin/activate && pip install pip-tools`
     - Windows: `cd .venv/Scripts` and `activate`, then `cd ../..`
 - Install dependencies with pip `pip install -r requirements.txt`
+
+## Change dependencies
+
+We use [pip-tools](https://github.com/jazzband/pip-tools) for dependency management. To add a new
+package, add it to `requirements.in` and run `pip-compile`, followed by `pip-sync`.
+To upgrade all dependencies, run `pip-compile --upgrade` and `pip-sync`.
 
 ## Setup application locally
 
