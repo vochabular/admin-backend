@@ -23,6 +23,7 @@ gunicorn
 isort
 jmespath
 lazy-object-proxy
+lxml
 mccabe
 mypy-extensions
 mypy
