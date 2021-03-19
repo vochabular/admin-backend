@@ -37,7 +37,7 @@ cffi==1.14.4
     # via
     #   -r requirements.in
     #   cryptography
-cryptography==3.3.1
+cryptography==3.3.2
     # via -r requirements.in
 dj-database-url==0.5.0
     # via
