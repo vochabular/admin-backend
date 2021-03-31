@@ -95,7 +95,7 @@ lazy-object-proxy==1.4.3
     # via
     #   -r requirements.in
     #   astroid
-lxml==4.6.2
+lxml==4.6.3
     # via -r requirements.in
 mccabe==0.6.1
     # via
