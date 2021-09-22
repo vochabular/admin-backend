@@ -43,6 +43,14 @@ dj-database-url==0.5.0
     # via
     #   -r requirements.in
     #   django-heroku
+django==3.1.13
+    # via
+    #   -r requirements.in
+    #   django-cors-headers
+    #   django-filter
+    #   django-graphql-jwt
+    #   django-heroku
+    #   graphene-django
 django-cors-headers==3.6.0
     # via -r requirements.in
 django-filter==2.4.0
@@ -51,24 +59,16 @@ django-graphql-jwt==0.3.1
     # via -r requirements.in
 django-heroku==0.3.1
     # via -r requirements.in
-django==3.1.8
-    # via
-    #   -r requirements.in
-    #   django-cors-headers
-    #   django-filter
-    #   django-graphql-jwt
-    #   django-heroku
-    #   graphene-django
 docutils==0.16
     # via -r requirements.in
-graphene-django==2.15.0
-    # via
-    #   -r requirements.in
-    #   django-graphql-jwt
 graphene==2.1.8
     # via
     #   -r requirements.in
     #   graphene-django
+graphene-django==2.15.0
+    # via
+    #   -r requirements.in
+    #   django-graphql-jwt
 graphql-core==2.3.2
     # via
     #   -r requirements.in
@@ -101,12 +101,12 @@ mccabe==0.6.1
     # via
     #   -r requirements.in
     #   pylint
+mypy==0.800
+    # via -r requirements.in
 mypy-extensions==0.4.3
     # via
     #   -r requirements.in
     #   mypy
-mypy==0.800
-    # via -r requirements.in
 promise==2.3
     # via
     #   -r requirements.in
@@ -129,17 +129,17 @@ pyjwt==1.7.1
     # via
     #   -r requirements.in
     #   django-graphql-jwt
+pylint==2.6.0
+    # via
+    #   -r requirements.in
+    #   pylint-django
+    #   pylint-plugin-utils
 pylint-django==2.4.2
     # via -r requirements.in
 pylint-plugin-utils==0.6
     # via
     #   -r requirements.in
     #   pylint-django
-pylint==2.6.0
-    # via
-    #   -r requirements.in
-    #   pylint-django
-    #   pylint-plugin-utils
 python-dateutil==2.8.1
     # via
     #   -r requirements.in
