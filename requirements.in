@@ -31,7 +31,7 @@ promise
 psycopg2
 pycodestyle
 pycparser
-pyjwt<2.0.0
+pyjwt<3.0.0
 pylint-django
 pylint-plugin-utils
 pylint
